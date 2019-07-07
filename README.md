@@ -1,2 +1,4 @@
 # WeChat-MiniProgram-WebAR
-WeChat WebAR Demo.
+This is a WeChat WebAR Demo.
+
+![avatar](sample.png)
