@@ -1,0 +1,15 @@
+<view class="page">
+    <view>
+      <camera 
+        device-position="back" 
+        flash="off"
+        binderror="error">
+        <canvas
+          canvas-id="canvas1">
+        </canvas>    
+      </camera>
+       <button type="primary" bindtap="takePhoto">{{btnText}}</button>
+    </view>
+    <view class="page__bd page__bd_spacing">  
+    </view>
+</view>

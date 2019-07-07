@@ -1,0 +1,16 @@
+<!--index.wxml-->
+<view class="page">
+    <view class="page__hd">
+        <view class="page__title">Wechat AR Demo</view>
+        <view class="page__desc"></view>
+    </view>
+    <view class="page__bd page__bd_spacing">
+        <navigator url="/pages/camera/camera">
+            <button class="weui-btn" type="primary">Access a camera</button>
+        </navigator>
+
+        <navigator url="/pages/photo/photo" class="marginTop10">
+            <button class="weui-btn" type="primary">Take a photo</button>
+        </navigator>
+    </view>
+</view>

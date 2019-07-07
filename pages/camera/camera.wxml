@@ -1,0 +1,15 @@
+<view class="page">
+    <view>
+      <camera 
+        device-position="back" 
+        flash="off" 
+        frame-size="medium"
+        binderror="error">
+        <canvas
+          canvas-id="canvas1">
+        </canvas>    
+      </camera>
+    </view>
+    <view class="page__bd page__bd_spacing">
+    </view>
+</view>
