@@ -10,18 +10,31 @@ The "tracking.js" library brings computer vision algorithms and techniques into 
 
 [tracking.js](https://trackingjs.com/)
 
+## Color Tracker
+
 Use this Demo to scan the picture below.
 
 ![avatar](sample.png)
 
 Expect the effect below.
 
-![avatar](sample2.jpg)
-
 Use "Take a Photo" mode.
 
 ![avatar](sample3.jpg)
 
-Use "Access a camera" mode.
+You also Use "Access a camera" mode.
 
 ![avatar](sample4.jpg)
+
+## Face Tracker
+
+Use this Demo to scan people's face.
+
+![avatar](face.jpg)
+
+Expect the effect below.
+
+Use "Take a Photo" mode.
+
+![avatar](sample5.jpg)
+
