@@ -9,5 +9,6 @@
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "Wechat AR",
     "navigationBarTextStyle": "black"
-  }
+  },
+  "sitemapLocation": "sitemap.json"
 }

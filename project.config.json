@@ -4,13 +4,21 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": true,
-		"es6": true,
+		"urlCheck": false,
+		"es6": false,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
+		"coverView": true,
 		"autoAudits": false,
-		"coverView": true
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.7.3",

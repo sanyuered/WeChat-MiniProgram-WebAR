@@ -1,14 +1,16 @@
 <view class="page">
     <view>
       <camera 
-        device-position="back" 
+        device-position="{{devicePosition}}" 
         flash="off" 
-        frame-size="medium"
+        frame-size="small"
         binderror="error">
         <canvas
-          canvas-id="canvas1">
+          canvas-id="canvas1"
+          class="canvas1">
         </canvas>    
-      </camera>
+      </camera>  
+      <button type="default" bindtap="changeDirection" class="marginTop10">change camera direction</button>
     </view>
     <view class="page__bd page__bd_spacing">
     </view>
