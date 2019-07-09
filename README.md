@@ -38,3 +38,17 @@ Use "Take a Photo" mode.
 
 ![avatar](sample5.jpg)
 
+## How to improve performance
+Face tracker is slow, but we can do some thing to improve speed. For example, we can blur image, grayscale image, sobel image, compress image and so on. After testing, we found that reducing image size is more proper. When image size is reduced, the parameters of tracker needs to be updated.
+
+// frame size of camera: the image size is smaller, the tracker's speed is faster.
+const frameWidth = 150;
+
+// face tracker parameter：the "initialScale" is bigger, the face tracker's speed is faster.
+const initialScale = 2;
+
+// color tracker parameter：the "minDimension" is bigger, the color tracker's speed is faster.
+const minDimension = 4;
+
+// time interval should be greater than cost time. The unit is milliseconds.
+const intervalTime = 350;
