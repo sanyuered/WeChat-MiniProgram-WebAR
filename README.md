@@ -22,7 +22,7 @@ Use "Take a Photo" mode.
 
 ![avatar](sample3.jpg)
 
-You also Use "Access a camera" mode.
+Use "Access a camera" mode.
 
 ![avatar](sample4.jpg)
 
