@@ -10,11 +10,9 @@ The "tracking.js" brings computer vision algorithms and techniques into browser 
 
 [tracking.js](https://trackingjs.com/)
 
-The "tracking.js" is a JavaScript computer vision library. 
+The "jsfeat" is a JavaScript computer vision library. 
 
 [JSFeat](https://inspirit.github.io/jsfeat/)
-
-## Demo miniprogram
 
 The Demo includes color tracker, face tracker, image tracker and object tracker. There are two modes for each item. It includes 'taking a photo' and 'access a camera'.
 
