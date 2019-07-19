@@ -3,39 +3,34 @@ const jsfeat = require('./jsfeat.js')
 const fastThreshold = 20;
 const blurRadius = 2;
 const descriptorLength = 256;
-const minGoodMatch = 4;
+const minMatchNumber = 10;
 
 // custom tracker
-var ImageTracker = function (patternPixels, width, height) {
+var ImageTracker = function (patternImageArray) {
   ImageTracker.base(this, 'constructor');
-
-  if (patternPixels) {
-    this.setPattern(patternPixels, width, height);
+  if (patternImageArray) {
+    this.setPattern(patternImageArray);
   }
 }
 tracking.inherits(ImageTracker, tracking.Tracker);
 ImageTracker.prototype.track = function (pixels, width, height) {
   var _that = this;
-  var pattern = _that.getPattern();
+  var patterns = _that.getPattern();
 
-  if (!pattern) {
+  if (!patterns) {
     console.log('Pattern not specified.');
     return;
   }
 
   var results = [];
-  results = _that.trackImage_(pattern, pixels, width, height);
+  results = _that.trackImage_(patterns, pixels, width, height);
 
   this.emit('track', {
     data: results,
   });
 }
-ImageTracker.prototype.setPattern = function (patternPixels, width, height) {
-  this.pattern = {
-    pixels: patternPixels,
-    width: width,
-    height: height,
-  };
+ImageTracker.prototype.setPattern = function (patternImageArray) {
+  this.pattern = patternImageArray;
 }
 ImageTracker.prototype.getPattern = function () {
   return this.pattern;
@@ -63,9 +58,13 @@ ImageTracker.prototype.calcTransform = function (matches) {
   }
 
   var mask = new jsfeat.matrix_t(count, 1, jsfeat.U8_t | jsfeat.C1_t);
+  // minimum points to estimate motion
   var model_size = 4;
+  // max error to classify as inlier
   var thresh = 3;
+  // max outliers ratio
   var eps = 0.5;
+  // probability of success
   var prob = 0.99;
   var params = new jsfeat.ransac_params_t(model_size, thresh, eps, prob);
   var max_iters = 1000;
@@ -82,7 +81,7 @@ ImageTracker.prototype.calcTransform = function (matches) {
     goodMatch = newFrom.length;
   }
 
-  affine2d_kernel.run(from, to, transform, goodMatch);
+  affine2d_kernel.run(newFrom, newTo, transform, goodMatch);
 
   return {
     transform: transform,
@@ -90,42 +89,47 @@ ImageTracker.prototype.calcTransform = function (matches) {
   };
 
 };
-
-ImageTracker.prototype.trackImage_ = function (pattern, pixels, width, height) {
+ImageTracker.prototype.trackImage_ = function (patterns, pixels, width, height) {
   tracking.Brief.N = descriptorLength;
   tracking.Fast.THRESHOLD = fastThreshold;
-
-  // blur
-  var blur1 = tracking.Image.blur(pattern.pixels, pattern.width, pattern.height, blurRadius);
+  var transformDataArray = [];
   var blur2 = tracking.Image.blur(pixels, width, height, blurRadius);
-
-  // grayscale
-  var gray1 = tracking.Image.grayscale(blur1, pattern.width, pattern.height);
   var gray2 = tracking.Image.grayscale(blur2, width, height);
-
-  // find corners
-  var corners1 = tracking.Fast.findCorners(gray1, pattern.width, pattern.height);
   var corners2 = tracking.Fast.findCorners(gray2, width, height);
-  console.log('found corners', corners1.length / 2, corners2.length / 2);
-
-  // get descriptors
-  var descriptors1 = tracking.Brief.getDescriptors(gray1, pattern.width, corners1);
   var descriptors2 = tracking.Brief.getDescriptors(gray2, width, corners2);
 
-  // match corners
-  var matches = tracking.Brief.reciprocalMatch(corners1, descriptors1, corners2, descriptors2);
-  console.log('matched corners:', matches);
+  var goodIndex = 0;
+  for (var i = 0; i < patterns.length; i++) {
+    var pattern = patterns[i];
+    // blur
+    var blur1 = tracking.Image.blur(pattern.pixels, pattern.width, pattern.height, blurRadius);
+    // grayscale
+    var gray1 = tracking.Image.grayscale(blur1, pattern.width, pattern.height);
+    // find corners
+    var corners1 = tracking.Fast.findCorners(gray1, pattern.width, pattern.height);
+    // get descriptors
+    var descriptors1 = tracking.Brief.getDescriptors(gray1, pattern.width, corners1);
+    // match corners
+    var matches = tracking.Brief.reciprocalMatch(corners1, descriptors1, corners2, descriptors2);
+    // calculate transform 
+    var transformData = this.calcTransform(matches);
+    transformDataArray.push(transformData);
 
-  // calculate transform 
-  var transformData = this.calcTransform(matches);
-  console.log('transformData:', transformData);
-  if (transformData && transformData.goodMatch >= minGoodMatch) {
-    return transformData;
+    if (transformDataArray[i].goodMatch >= minMatchNumber) {
+      goodIndex = i;
+      break;
+    }
   }
+
+  var properTransform = transformDataArray[goodIndex];
+  var properPattern = patterns[goodIndex];
 
   return {
-    data: [],
-  }
+    goodMatch: properTransform.goodMatch,
+    transform: properTransform.transform,
+    width: properPattern.width,
+    height: properPattern.height,
+  };
 };
 
 module.exports = ImageTracker;
