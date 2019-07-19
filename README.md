@@ -1,34 +1,44 @@
 # Introduction of WeChat MiniProgram Web AR 
 
-This is a WeChat Web AR Demo. On July 5, 2019, WeChat miniprogram supports AR. It has added a new API named "CameraFrameListener".
+This is a WeChat Web AR Demo. On July 5, 2019, WeChat miniprogram supports AR. It has been added a new API named "CameraFrameListener".
 
 [CameraFrameListener API](https://developers.weixin.qq.com/miniprogram/dev/api/media/camera/CameraContext.onCameraFrame.html)
 
-We can create AR effects with the new API. This demo demonstrates a color tracker effect by "tracking.js" library. 
+We can create AR effects with the new API. This demo demonstrates a color tracker effect using "tracking.js" and "jsfeat" library. 
 
-The "tracking.js" library brings computer vision algorithms and techniques into browser environment. We can do real-time color tracking, face detection and much more.
+The "tracking.js" brings computer vision algorithms and techniques into browser environment. We can do real-time color tracking, face detection and much more.
 
 [tracking.js](https://trackingjs.com/)
 
+The "tracking.js" is a JavaScript computer vision library. 
+
+[JSFeat](https://inspirit.github.io/jsfeat/)
+
+## Demo miniprogram
+
+The Demo includes color tracker, face tracker, image tracker and object tracker. There are two modes for each item. It includes 'taking a photo' and 'access a camera'.
+
+![avatar](screenshot/indexpage.jpg)
+
 ## Color Tracker
 
-Use this Demo to scan the picture below.
+Use the Demo to scan the picture below.
 
-![avatar](sample.png)
+![avatar](screenshot/colortracker1.jpg)
 
 Expect the effect below.
 
 Use "Take a Photo" mode.
 
-![avatar](sample3.jpg)
+![avatar](screenshot/colortracker2.jpg)
 
 Use "Access a camera" mode.
 
-![avatar](sample4.jpg)
+![avatar](screenshot/colortracker3.jpg)
 
 ## Face Tracker
 
-Use this Demo to scan people's face.
+Use the Demo to scan people's face.
 
 ![avatar](face.jpg)
 
@@ -36,9 +46,45 @@ Expect the effect below.
 
 Use "Take a Photo" mode.
 
-![avatar](sample5.jpg)
+![avatar](screenshot/facetracker.jpg)
+
+## Image Tracker
+
+a sample pattern picture is below.
+
+![avatar](face.jpg)
+
+Use the Demo to scan a rotate picture below.
+
+![avatar](screenshot/2_rotate.jpg)
+
+Expected:
+
+![avatar](screenshot/imagetracker2.jpg)
+
+Use the Demo to scan a skew picture below.
+
+![avatar](screenshot/2_skew.jpg)
+
+Expected:
+
+![avatar](screenshot/imagetracker3.jpg)
+
+Use the Demo to scan a translate and scale picture below.
+
+![avatar](screenshot/2_translate_scale.jpg)
+
+Expected:
+
+![avatar](screenshot/imagetracker1.jpg)
+
+
+## Object Tracker (Not recommended)
+
+There will be a rect aboves people's mouth. It is slow and not better than face tracker. 
 
 ## How to improve performance
+
 Face tracker is slow, but we can do some thing to improve speed. For example, we can blur image, grayscale image, sobel image, compress image and so on. After testing, we found that reducing image size is more proper. When image size is reduced, the parameters of tracker needs to be updated.
 
 frame size of camera: the image size is smaller, the tracker's speed is faster.
@@ -56,7 +102,7 @@ color tracker parameter：the "minDimension" is bigger, the color tracker's spee
 const minDimension = 4;
 ```
 
-time interval should be greater than cost time. The unit is milliseconds.
+interval time: interval time should be greater than cost time. The unit is milliseconds.
 ```javascript
 const intervalTime = 350;
 ```
