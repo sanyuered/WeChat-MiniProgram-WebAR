@@ -1,4 +1,4 @@
-There is a Chinese readme. Please visit https://zhuanlan.zhihu.com/p/72617098.
+[Chinese readme](https://zhuanlan.zhihu.com/p/72617098)
 
 # Introduction of WeChat MiniProgram Web AR 
 
