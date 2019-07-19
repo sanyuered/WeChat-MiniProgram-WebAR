@@ -32,7 +32,7 @@
             <button class="weui-btn">Take a photo</button>
         </navigator>
 
-        <view class="page__desc marginTop10">Object Tracker</view>
+        <view class="page__desc marginTop10">Object Tracker（Not recommended）</view>
 
         <navigator url="/pages/camera/camera?type=objectTracker" class="marginTop10">
             <button class="weui-btn" type="primary">Access a camera</button>
