@@ -8,7 +8,7 @@
           canvas-id="canvas1"
           class="canvas1">
         </canvas> 
-      </camera>    
+      </camera>  
       <canvas
           canvas-id="hiddenCanvas" 
           class="hiddenCanvas">

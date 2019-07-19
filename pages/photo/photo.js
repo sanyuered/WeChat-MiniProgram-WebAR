@@ -16,10 +16,16 @@ const frameWidth = 200;
 const initialScale = 2;
 // color tracker parameter
 const minDimension = 4;
+// pattern image resample levels
+const resampleLevels = 4;
 // pattern image url: relative url,temp url and network url.
 const patternImageUrl = '../../face.jpg';
 // pattern image width
-const patternFrameWidth = 200;
+var patternFrameWidth = 0;
+// pattern image height
+var patternFrameHeight = 0;
+// pattern image min width
+const patternFrameMinWidth = 200;
 // if is taking photo
 var isRunning = true;
 // color tacker, face tracker, image tracker.
@@ -30,8 +36,8 @@ var tempImagePath = null;
 var frameHeight = 0;
 // temp pattern Image Path
 var tempPatternImagePath = null;
-//pattern image height
-var patternFrameHeight = 0;
+// pattern Image Array
+var patternImageArray = [];
 
 Page({
   data: {
@@ -190,31 +196,71 @@ Page({
   },
   getPatternImage(patternImageUrl, callback) {
     var _that = this;
+    // magic number
+    const sc_inc = Math.sqrt(2.0);
     const ctx = wx.createCanvasContext(hiddenCanvasId);
+    // init
+    patternImageArray = [];
 
     wx.getImageInfo({
       src: patternImageUrl,
       success: function (res) {
-        // size ratio
-        patternFrameHeight = (res.height / res.width) * patternFrameWidth;
-        // for test
+        // pattern image temp path
         tempPatternImagePath = res.path;
-        // draw image on canvas
-        ctx.drawImage(res.path, 0, 0, frameWidth, patternFrameHeight);
+        // pattern image size
+        patternFrameWidth = res.width;
+        patternFrameHeight = res.height;
+
+        // reduce image size to increase image process speed
+        if (patternFrameWidth > patternFrameMinWidth) {
+          patternFrameWidth = patternFrameMinWidth;
+          patternFrameHeight = (res.height / res.width) * patternFrameMinWidth;
+        }
+
+        // resample width and height
+        var newWidth = patternFrameWidth;
+        var newHeight = patternFrameHeight;
+        var imageX = 0;
+
+        for (var i = 0; i < resampleLevels; i++) {
+          // draw image on canvas
+          ctx.drawImage(tempPatternImagePath, imageX, 0, newWidth, newHeight);
+          // resample
+          imageX += newWidth;
+          newWidth = Math.round(newWidth / sc_inc);
+          newHeight = Math.round(newHeight / sc_inc);
+        }
+
         ctx.draw(false, function () {
-          wx.canvasGetImageData({
-            canvasId: hiddenCanvasId,
-            x: 0,
-            y: 0,
-            width: frameWidth,
-            height: patternFrameHeight,
-            success(canvasRes) {
-              if (typeof callback === 'function') {
-                console.log('pattern image', canvasRes.width, canvasRes.height);
-                callback(canvasRes.data, canvasRes.width, canvasRes.height);
+          imageX = 0;
+          newWidth = patternFrameWidth;
+          newHeight = patternFrameHeight;
+          for (var i = 0; i < resampleLevels; i++) {
+            wx.canvasGetImageData({
+              canvasId: hiddenCanvasId,
+              x: imageX,
+              y: 0,
+              width: newWidth,
+              height: newHeight,
+              success(canvasRes) {
+                console.log('resample pattern image', canvasRes.width, canvasRes.height);
+                patternImageArray.push({
+                  pixels: canvasRes.data,
+                  width: canvasRes.width,
+                  height: canvasRes.height,
+                });
+                if (patternImageArray.length === resampleLevels) {
+                  if (typeof callback === 'function') {
+                    callback(patternImageArray);
+                  }
+                }
               }
-            }
-          });
+            });
+            // resample
+            imageX += newWidth;
+            newWidth = Math.round(newWidth / sc_inc);
+            newHeight = Math.round(newHeight / sc_inc);
+          }
         });
       },
       fail: function (error) {
@@ -226,23 +272,28 @@ Page({
     var _that = this;
     const ctx = wx.createCanvasContext(canvasId);
     // get patter image
-    _that.getPatternImage(patternImageUrl, function (patternPixels, width, height) {
-      tracker = new ImageTracker(patternPixels, width, height);
+    _that.getPatternImage(patternImageUrl, function (patternImageArray) {
+      tracker = new ImageTracker(patternImageArray);
       tracker.on('track', function (event) {
         if (event.data != null) {
           console.log('event.data', event.data);
         }
-        if (event.data.transform.data.length === 0) {
+
+        if (event.data.goodMatch < 10) {
           var message = 'No results found.';
           console.log(message);
           wx.showToast({
             title: message,
             icon: 'none'
           });
+          return;
         }
+        var patternWidth = event.data.width;
+        var patternHeight = event.data.height;
+
         // draw origin photo on canvas
         ctx.drawImage(tempImagePath, 0, 0, canvasWidth, canvasHeight);
-        // size ratio 
+        // size ratio of origin image
         var widthRatio = canvasWidth / frameWidth;
         var heightRatio = canvasHeight / frameHeight;
 
@@ -256,11 +307,11 @@ Page({
           var f = transformArray[5];
           console.log(a, b, c, d, e, f);
           // transform canvas
-          ctx.transform(a, b, c, d, e* widthRatio, f* heightRatio);
-
+          ctx.transform(a, b, c, d, e * widthRatio, f * heightRatio);
           // draw sample pattern on canvas
           ctx.fillStyle = 'rgba(0,0,0,0.5)';
-          ctx.fillRect(0, 0, patternFrameWidth * widthRatio, patternFrameHeight * heightRatio);
+          // according to the size of origin image
+          ctx.fillRect(0, 0, patternWidth * widthRatio, patternHeight * heightRatio);
         }
         ctx.draw();
       });
@@ -349,7 +400,6 @@ Page({
   },
   changeDirection() {
     var status = this.data.devicePosition;
-
     if (status === 'back') {
       status = 'front';
     } else {
