@@ -1,3 +1,5 @@
+There is a Chinese readme. Please visit https://zhuanlan.zhihu.com/p/72617098.
+
 # Introduction of WeChat MiniProgram Web AR 
 
 This is a WeChat Web AR Demo. On July 5, 2019, WeChat miniprogram supports AR. It has been added a new API named "CameraFrameListener".
