@@ -1,6 +1,6 @@
-1.[Chinese README](https://zhuanlan.zhihu.com/p/72617098)  
+1. [Chinese README](https://zhuanlan.zhihu.com/p/72617098)  
 
-2.[Chinese Source Code Analysis](https://zhuanlan.zhihu.com/p/74438078)
+2. [Chinese Source Code Analysis](https://zhuanlan.zhihu.com/p/74438078)
 
 # Introduction of WeChat MiniProgram Web AR 
 
