@@ -50,7 +50,7 @@ Use "Take a Photo" mode.
 
 ![avatar](screenshot/facetracker.jpg)
 
-2019-8-1 updated:
+**2019-8-1 updated:**
 
 perspective transform: a bad result.
 
@@ -90,7 +90,7 @@ Expected:
 
 ![avatar](screenshot/imagetracker1.jpg)
 
-2019-8-1 updated:
+**2019-8-1 updated:**
 
 perspective transform
 
@@ -123,3 +123,7 @@ interval time: interval time should be greater than cost time. The unit is milli
 ```javascript
 const intervalTime = 350;
 ```
+
+## Known Issues
+
+Face tracker is very slow.
