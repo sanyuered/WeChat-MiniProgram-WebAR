@@ -50,6 +50,16 @@ Use "Take a Photo" mode.
 
 ![avatar](screenshot/facetracker.jpg)
 
+2019-8-1 updated:
+
+perspective transform: a bad result.
+
+![avatar](facetracker_perspective1.jpg)
+
+perspective transform: a good result.
+
+![avatar](facetracker_perspective2.jpg)
+
 ## Image Tracker
 
 a sample pattern picture is below.
@@ -80,6 +90,11 @@ Expected:
 
 ![avatar](screenshot/imagetracker1.jpg)
 
+2019-8-1 updated:
+
+perspective transform
+
+![avatar](screenshot/imagetracker_perspective.jpg)
 
 ## Object Tracker (Not recommended)
 
