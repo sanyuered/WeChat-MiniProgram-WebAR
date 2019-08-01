@@ -5,10 +5,10 @@
         flash="off" 
         frame-size="small"
         binderror="error">
-        <canvas
+       <canvas
           canvas-id="canvas1"
           class="canvas1">
-        </canvas>    
+        </canvas> 
       </camera>
       <canvas
           canvas-id="hiddenCanvas"

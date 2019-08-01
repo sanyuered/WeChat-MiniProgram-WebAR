@@ -10,14 +10,14 @@ camera{
 }
 
 .canvas1{
-    width: 100%; 
-    height: 100%;
+    width: 375px;  
+    height: 458px;
     z-index: 2;
 }
 
 .hiddenCanvas{
     position:fixed;
     left:1000px;
-    width:100%;
-    height:100%;
+    width:800%;
+    height:400%;
 }

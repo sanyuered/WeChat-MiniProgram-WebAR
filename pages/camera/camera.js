@@ -1,21 +1,21 @@
 const tracking = require('../../utils/tracking.js')
 const face = require('../../utils/face.js')
 const mouth = require('../../utils/mouth.js')
-const landmarks = require('../../utils/Landmarks.js')
-const regressor = require('../../utils/Regressor.js')
+const landmarksData = require('../../utils/Landmarks.js')
+const regressorData = require('../../utils/Regressor.js')
 const ImageTracker = require('../../utils/ImageTracker.js')
 const canvasId = 'canvas1';
 const hiddenCanvasId = 'hiddenCanvas';
 // canvas width
 const canvasWidth = 375;
 // canvas height
-const canvasHeight = 458;
-// small frame size
-const frameWidth = 141;
-// face tracker parameter
-const initialScale = 2;
+var canvasHeight = 0;
 // color tracker parameter
 const minDimension = 4;
+// small frame size
+const frameWidth = 288;
+// face tracker parameter
+const initialScale = 2;
 // pattern image resample levels
 const resampleLevels = 4;
 // pattern image url: relative url,temp url and network url.
@@ -24,18 +24,12 @@ const patternImageUrl = '../../face.jpg';
 var patternFrameWidth = 0;
 // pattern image height
 var patternFrameHeight = 0;
-// pattern image min width
-const patternFrameMinWidth = 141;
-// time interval should be greater than cost time
-const intervalTime = 600;
-//pattern image height
-var patternFrameHeight = 0;
+// pattern image max width
+const patternFrameMaxWidth = 288;
+// decoration image for image tracker 
+const decorationImageUrl = '../../cat_beard.png';
 // color tacker, face tracker, image tracker.
 var tracker = null;
-// camera listener
-var listener = null;
-// id of setInterval
-var intervalId = null;
 // height of frame size
 var frameHeight = 0;
 // context of canvas
@@ -48,6 +42,12 @@ var lastLandmarks = null;
 var lastTransform = null;
 // pattern Image Array
 var patternImageArray = [];
+// time interval should be greater than cost time
+const intervalTime = 2200;
+// camera listener
+var listener = null;
+// id of setInterval
+var intervalId = null;
 
 Page({
   data: {
@@ -60,10 +60,10 @@ Page({
   },
   onUnload: function () {
     this.stopTacking();
+    console.log('onUnload','listener is stop');
   },
   drawByColorTracker() {
     var _that = this;
-    //const ctx = wx.createCanvasContext(canvasId);
     const ctx = canvasContext;
     tracker = new tracking.ColorTracker(['yellow', 'magenta', 'cyan']);
     tracker.setMinDimension(minDimension);
@@ -98,20 +98,77 @@ Page({
     // start
     _that.startTacking();
   },
+  drawFaceDecoration(landmarks, ctx) {
+    var _that = this;
+    var srcPoints = [];
+    var destPoints = [];
+    var widthRatio = frameWidth / 375;
+    var heightRatio = frameHeight / 375;
+    // 4 source points
+    // The numbers 108.7264383 and 109.1273706 are positions on picture "cat_beard.png".
+    // The picture "cat_beard.png" width is 375 and height is 375.
+    srcPoints.push({
+      x: 145.3 * widthRatio,
+      y: 140.8 * heightRatio,
+    });
+    srcPoints.push({
+      x: 215.5 * widthRatio,
+      y: 140.2 * heightRatio,
+    });
+    srcPoints.push({
+      x: 155.57 * widthRatio,
+      y: 222.19 * heightRatio,
+    });
+    srcPoints.push({
+      x: 217.04 * widthRatio,
+      y: 221.27 * heightRatio,
+    });
+    // 4 destion points
+    // The point index 20, 24, 27 and 29 are index of feature points on the face.
+    destPoints.push({
+      x: landmarks[20][0],
+      y: landmarks[20][1],
+    });
+    destPoints.push({
+      x: landmarks[24][0],
+      y: landmarks[24][1],
+    });
+    destPoints.push({
+      x: landmarks[27][0],
+      y: landmarks[27][1],
+    });
+    destPoints.push({
+      x: landmarks[29][0],
+      y: landmarks[29][1],
+    });
+    // get transform from source to destion
+    var transformData = ImageTracker.perspective_transform(
+      srcPoints[0].x, srcPoints[0].y, destPoints[0].x, destPoints[0].y,
+      srcPoints[1].x, srcPoints[1].y, destPoints[1].x, destPoints[1].y,
+      srcPoints[2].x, srcPoints[2].y, destPoints[2].x, destPoints[2].y,
+      srcPoints[3].x, srcPoints[3].y, destPoints[3].x, destPoints[3].y,
+    );
+  
+    //draw image on UI
+    _that.drawImageOnUI(transformData.data,
+      canvasWidth,
+      canvasHeight,
+      decorationImageUrl,
+      ctx);
+  },
   drawByFaceTracker() {
     var _that = this;
-    //const ctx = wx.createCanvasContext(canvasId);
     const ctx = canvasContext;
     tracking.ViolaJones.classifiers.face = face;
-    tracking.LBF.LandmarksData = landmarks;
-    tracking.LBF.RegressorData = regressor;
+    tracking.LBF.LandmarksData = landmarksData;
+    tracking.LBF.RegressorData = regressorData;
     // maxNumStages depends on children of "Regressor.js"
     tracking.LBF.maxNumStages = 1;
 
     // new LandmarksTracker
     tracker = new tracking.LandmarksTracker();
     tracker.setInitialScale(initialScale);
-    tracker.setStepSize(2);
+    tracker.setStepSize(1);
     tracker.setEdgesDensity(0.1);
     tracker.on('track', function (event) {
       if (!event.data) {
@@ -122,17 +179,13 @@ Page({
       if (!event.data.landmarks) {
         var message = 'No results found.';
         console.log(message);
-      }else{
+      } else {
         //save last landmarks
         lastLandmarks = event.data.landmarks;
       }
-
-
       // size ratio 
       var widthRatio = canvasWidth / frameWidth;
       var heightRatio = canvasHeight / frameHeight;
-
-      /*
       // draw rect
       event.data.faces.forEach(function (rect) {
         // scale
@@ -148,14 +201,14 @@ Page({
         ctx.fillText('x:' + rect.x, rect.x + rect.width + 5, rect.y + 11);
         ctx.fillText('y:' + rect.y, rect.x + rect.width + 5, rect.y + 22);
       });
-      */
 
       // draw points
       if (lastLandmarks) {
         lastLandmarks.forEach(function (landmarks) {
-          for (var landmark in landmarks) {
-            var x = landmarks[landmark][0];
-            var y = landmarks[landmark][1];
+          for (var i = 0; i < landmarks.length; i++) {
+            var landmark = landmarks[i];
+            var x = landmark[0];
+            var y = landmark[1];
             // scale
             x = Math.round(x * widthRatio);
             y = Math.round(y * heightRatio);
@@ -164,20 +217,27 @@ Page({
             ctx.fillStyle = "#fff";
             ctx.arc(x, y, 1, 0, 2 * Math.PI);
             ctx.fill();
+            ctx.fillText(i, x + 3, y + 3);
           }
         });
       }
-      ctx.draw();
+
+      if (event.data.landmarks.length > 0) {
+        // draw face decoration
+        _that.drawFaceDecoration(event.data.landmarks[0], ctx);
+      }
+      // function drawImageOnUI() will invoke function draw().
+      //ctx.draw();
     });
     // start
     _that.startTacking();
   },
   drawByObjectTracker() {
     var _that = this;
-    const ctx = wx.createCanvasContext(canvasId);
+    const ctx = canvasContext;
     tracking.ViolaJones.classifiers.mouth = mouth;
     tracker = new tracking.ObjectTracker(['mouth']);
-    tracker.setInitialScale(1);
+    tracker.setInitialScale(initialScale);
     tracker.setStepSize(2);
     tracker.setEdgesDensity(0.1);
     tracker.on('track', function (event) {
@@ -210,7 +270,7 @@ Page({
     var _that = this;
     // magic number
     const sc_inc = Math.sqrt(2.0);
-    const ctx = wx.createCanvasContext(hiddenCanvasId);
+    const ctx = hiddenCanvasContext;
     // init
     patternImageArray = [];
 
@@ -224,9 +284,9 @@ Page({
         patternFrameHeight = res.height;
 
         // reduce image size to increase image process speed
-        if (patternFrameWidth > patternFrameMinWidth) {
-          patternFrameWidth = patternFrameMinWidth;
-          patternFrameHeight = (res.height / res.width) * patternFrameMinWidth;
+        if (patternFrameWidth > patternFrameMaxWidth) {
+          patternFrameWidth = patternFrameMaxWidth;
+          patternFrameHeight = (res.height / res.width) * patternFrameMaxWidth;
         }
 
         // resample width and height
@@ -280,9 +340,86 @@ Page({
       }
     });
   },
+  drawImageOnUI(transformData, patternWidth, patternHeight, imageUrl, ctx) {
+    var _that = this;
+    // avoid to get hidden images existed
+    const offsetLeft = 375;
+    const hiddenCtx = hiddenCanvasContext;
+    hiddenCtx.drawImage(imageUrl, offsetLeft, 0, patternWidth, patternHeight);
+    hiddenCtx.draw(false, function () {  
+      // get image data of srcImage
+      wx.canvasGetImageData({
+        canvasId: hiddenCanvasId,
+        x: offsetLeft,
+        y: 0,
+        width: patternWidth,
+        height: patternHeight,
+        success(srcImage) {
+          // create a image data of destImage
+          wx.canvasGetImageData({
+            canvasId: hiddenCanvasId,
+            x: offsetLeft,
+            y: 0,
+            width: canvasWidth,
+            height: canvasHeight,
+            success(destImage) {
+              // invert the transform for function "warp_perspective_color" 
+              ImageTracker.invert_transform({ data: transformData });
+              // warp perspective
+              ImageTracker.warp_perspective_color(
+                srcImage,
+                destImage,
+                transformData);
+              var itemData = destImage.data;
+
+              // convert from black to transparent.
+              for (var i = 0; i < itemData.length; i = i + 4) {
+                if (itemData[i] === 0 &&
+                  itemData[i + 1] === 0 &&
+                  itemData[i + 2] === 0 &&
+                  itemData[i + 3] !== 0) {
+                  itemData[i + 3] = 0;
+                }
+              }
+              // put image data
+              wx.canvasPutImageData({
+                canvasId: hiddenCanvasId,
+                x: offsetLeft,
+                y: 0,
+                width: canvasWidth,
+                height: canvasHeight,
+                data: itemData,
+                success(res) {
+                  // get image file path
+                  wx.canvasToTempFilePath({
+                    x: offsetLeft,
+                    y: 0,
+                    width: canvasWidth,
+                    height: canvasHeight,
+                    destWidth: canvasWidth,
+                    destHeight: canvasHeight,
+                    canvasId: hiddenCanvasId,
+                    success(res) {
+                      // draw image
+                      ctx.drawImage(res.tempFilePath, 0, 0, canvasWidth, canvasHeight);
+                      ctx.draw();
+                      console.log('drawImageOnUI', 'completed');
+                    }
+                  });
+                },
+                fail(errorMsg) {
+                  console.log('drawImageOnUI', errorMsg);
+                }
+              });
+            }
+          });
+        }
+      });
+    });
+  },
   drawByImageTracker() {
     var _that = this;
-    const ctx = wx.createCanvasContext(canvasId);
+    const ctx = canvasContext;
     // get patter image
     _that.getPatternImage(patternImageUrl, function (patternImageArray) {
       tracker = new ImageTracker(patternImageArray);
@@ -295,34 +432,21 @@ Page({
         if (event.data.goodMatch < 10) {
           var message = 'No results found.';
           console.log(message);
-        }else{      
-           //save last transform
-           lastTransform = event.data.transform;
+        } else {
+          //save last transform
+          lastTransform = event.data.transform;
         }
-
-        var patternWidth = event.data.width;
-        var patternHeight = event.data.height;
-        // size ratio of origin image
-        var widthRatio = canvasWidth / frameWidth;
-        var heightRatio = canvasHeight / frameHeight;
 
         if (lastTransform) {
           var transformArray = lastTransform.data;
-          var a = transformArray[0];
-          var c = transformArray[1];
-          var e = transformArray[2];
-          var b = transformArray[3];
-          var d = transformArray[4];
-          var f = transformArray[5];
-          console.log(a, b, c, d, e, f);
-          // transform canvas
-          ctx.transform(a, b, c, d, e * widthRatio, f * heightRatio);
-          // draw sample pattern on canvas
-          ctx.fillStyle = 'rgba(0,0,0,0.5)';
-          // according to the size of origin image
-          ctx.fillRect(0, 0, patternWidth * widthRatio, patternHeight * heightRatio);
+          _that.drawImageOnUI(transformArray,
+            event.data.width,
+            event.data.height,
+            decorationImageUrl,
+            ctx);
         }
-        ctx.draw();
+        // function drawImageOnUI() will invoke function draw().
+        //ctx.draw();
       });
     });
     // start
@@ -344,7 +468,6 @@ Page({
     // image position
     const imageX = 0;
     const imageY = 0;
-    //const ctx = wx.createCanvasContext(hiddenCanvasId);
     const ctx = hiddenCanvasContext;
     wx.canvasPutImageData({
       canvasId: hiddenCanvasId,
@@ -376,7 +499,6 @@ Page({
   },
   processPhoto(resData, imageWidth, imageHeight) {
     var _that = this;
-    //const ctx = wx.createCanvasContext(hiddenCanvasId);
     const ctx = hiddenCanvasContext;
     // image position
     const imageX = 0;
@@ -444,11 +566,19 @@ Page({
     });
     // start
     listener.start();
+    console.log('startTacking','listener is start');
+
     // process
     intervalId = setInterval(function () {
-      if (resData) {
-        _that.processPhoto(resData, resWidth, resHeight);
+      if (!resData) {
+        return;
       }
+      // canvas Height
+      if (canvasHeight === 0) {
+        canvasHeight = Math.round(canvasWidth * (resHeight / resWidth));
+        return;
+      }
+      _that.processPhoto(resData, resWidth, resHeight);
     }, intervalTime);
 
   },
