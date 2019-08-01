@@ -54,11 +54,11 @@ Use "Take a Photo" mode.
 
 perspective transform: a bad result.
 
-![avatar](facetracker_perspective1.jpg)
+![avatar](screenshot/facetracker_perspective1.jpg)
 
 perspective transform: a good result.
 
-![avatar](facetracker_perspective2.jpg)
+![avatar](screenshot/facetracker_perspective2.jpg)
 
 ## Image Tracker
 
