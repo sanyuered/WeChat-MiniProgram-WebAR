@@ -1,7 +1,7 @@
 <view class="page">
     <view class="page__bd page__bd_spacing">
         <view class="page__title">Wechat AR Demo</view>
-        
+     
         <view class="page__desc">Color Tracker</view>
 
         <navigator url="/pages/camera/camera?type=colorTracker" class="marginTop10">
