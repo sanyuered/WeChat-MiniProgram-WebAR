@@ -1,7 +1,12 @@
 {
-	"description": "项目配置文件",
+	"description": "project config file",
 	"packOptions": {
-		"ignore": []
+		"ignore": [
+			{
+				"type": "folder",
+				"value": "screenshot"
+			}
+		]
 	},
 	"setting": {
 		"urlCheck": false,
