@@ -52,11 +52,11 @@ Use "Take a Photo" mode.
 
 **2019-8-1 updated:**
 
-perspective transform: a bad result.
+When face recognition is not exact, the result is not good.
 
 ![avatar](screenshot/facetracker_perspective1.jpg)
 
-perspective transform: a good result.
+When face recognition is exact, the result is good.
 
 ![avatar](screenshot/facetracker_perspective2.jpg)
 
@@ -92,7 +92,11 @@ Expected:
 
 **2019-8-1 updated:**
 
-perspective transform
+Use the Demo to scan a perspective picture below.
+
+![avatar](screenshot/2_perspective.jpg)
+
+Expected:
 
 ![avatar](screenshot/imagetracker_perspective.jpg)
 
