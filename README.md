@@ -3,6 +3,7 @@
 2. [Chinese Source Code Analysis](https://zhuanlan.zhihu.com/p/74438078)
 
 **2019-8-6 updated:**
+
 Issue fixed: When function "wx.canvasToTempFilePath" is called frequently on Android Wechat, WeChat will be crashed.
 
 # Introduction of WeChat MiniProgram Web AR 
