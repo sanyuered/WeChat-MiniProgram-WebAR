@@ -13,9 +13,9 @@ var canvasHeight = 0;
 // color tracker parameter
 const minDimension = 4;
 // small frame size
-const frameWidth = 288;
+var frameWidth = 288;
 // face tracker parameter
-const initialScale = 2;
+const initialScale = 4;
 // pattern image resample levels
 const resampleLevels = 4;
 // pattern image url: relative url,temp url and network url.
@@ -25,7 +25,7 @@ var patternFrameWidth = 0;
 // pattern image height
 var patternFrameHeight = 0;
 // pattern image max width
-const patternFrameMaxWidth = 288;
+const patternFrameMaxWidth = 265;
 // decoration image for image tracker 
 const decorationImageUrl = '../../cat_beard.png';
 // color tacker, face tracker, image tracker.
@@ -43,7 +43,8 @@ var lastTransform = null;
 // pattern Image Array
 var patternImageArray = [];
 // time interval should be greater than cost time
-const intervalTime = 2200;
+// Because JavaScript on Android Wechat runs faster than iOS, the parameter "intervalTime" can be less than 1200(ms).
+const intervalTime = 1200;
 // camera listener
 var listener = null;
 // id of setInterval
@@ -60,7 +61,7 @@ Page({
   },
   onUnload: function () {
     this.stopTacking();
-    console.log('onUnload','listener is stop');
+    console.log('onUnload', 'listener is stop');
   },
   drawByColorTracker() {
     var _that = this;
@@ -148,7 +149,7 @@ Page({
       srcPoints[2].x, srcPoints[2].y, destPoints[2].x, destPoints[2].y,
       srcPoints[3].x, srcPoints[3].y, destPoints[3].x, destPoints[3].y,
     );
-  
+
     //draw image on UI
     _that.drawImageOnUI(transformData.data,
       canvasWidth,
@@ -343,14 +344,14 @@ Page({
   drawImageOnUI(transformData, patternWidth, patternHeight, imageUrl, ctx) {
     var _that = this;
     // avoid to get hidden images existed
-    const offsetLeft = 375;
+    const offsetLeft = canvasWidth;
     const hiddenCtx = hiddenCanvasContext;
-    hiddenCtx.drawImage(imageUrl, offsetLeft, 0, patternWidth, patternHeight);
-    hiddenCtx.draw(false, function () {  
+    hiddenCtx.drawImage(imageUrl, 0, 0, patternWidth, patternHeight);
+    hiddenCtx.draw(false, function () {
       // get image data of srcImage
       wx.canvasGetImageData({
         canvasId: hiddenCanvasId,
-        x: offsetLeft,
+        x: 0,
         y: 0,
         width: patternWidth,
         height: patternHeight,
@@ -370,8 +371,7 @@ Page({
                 srcImage,
                 destImage,
                 transformData);
-              var itemData = destImage.data;
-
+              var itemData = destImage.data;      
               // convert from black to transparent.
               for (var i = 0; i < itemData.length; i = i + 4) {
                 if (itemData[i] === 0 &&
@@ -383,29 +383,14 @@ Page({
               }
               // put image data
               wx.canvasPutImageData({
-                canvasId: hiddenCanvasId,
-                x: offsetLeft,
+                canvasId: canvasId,
+                x: 0,
                 y: 0,
                 width: canvasWidth,
                 height: canvasHeight,
                 data: itemData,
                 success(res) {
-                  // get image file path
-                  wx.canvasToTempFilePath({
-                    x: offsetLeft,
-                    y: 0,
-                    width: canvasWidth,
-                    height: canvasHeight,
-                    destWidth: canvasWidth,
-                    destHeight: canvasHeight,
-                    canvasId: hiddenCanvasId,
-                    success(res) {
-                      // draw image
-                      ctx.drawImage(res.tempFilePath, 0, 0, canvasWidth, canvasHeight);
-                      ctx.draw();
-                      console.log('drawImageOnUI', 'completed');
-                    }
-                  });
+                  console.log('drawImageOnUI', 'completed');
                 },
                 fail(errorMsg) {
                   console.log('drawImageOnUI', errorMsg);
@@ -420,6 +405,7 @@ Page({
   drawByImageTracker() {
     var _that = this;
     const ctx = canvasContext;
+
     // get patter image
     _that.getPatternImage(patternImageUrl, function (patternImageArray) {
       tracker = new ImageTracker(patternImageArray);
@@ -439,9 +425,10 @@ Page({
 
         if (lastTransform) {
           var transformArray = lastTransform.data;
+          var ratio = canvasHeight / canvasWidth;
           _that.drawImageOnUI(transformArray,
-            event.data.width,
-            event.data.height,
+            Math.round(event.data.width * ratio),
+            Math.round(event.data.height * ratio),
             decorationImageUrl,
             ctx);
         }
@@ -458,6 +445,7 @@ Page({
       listener.stop();
     }
   },
+   /* 20.619.8 Because function "wx.canvasToTempFilePath()" will cause a crash problem on Android Wechat, this code will not be executed temporarily.
   compressPhoto(resData,
     imageWidth,
     imageHeight,
@@ -497,49 +485,59 @@ Page({
       }
     });
   },
+  */
   processPhoto(resData, imageWidth, imageHeight) {
-    var _that = this;
-    const ctx = hiddenCanvasContext;
-    // image position
-    const imageX = 0;
-    const imageY = 0;
-    // size ratio
-    frameHeight = (imageHeight / imageWidth) * frameWidth;
-    // option: compress image
-    _that.compressPhoto(resData,
-      imageWidth,
-      imageHeight,
-      frameWidth,
-      frameHeight,
-      function (photoPath) {
-        // draw image on hidden canvas
-        ctx.drawImage(photoPath, imageX, imageY, frameWidth, frameHeight);
-        // waiting for drawing
-        ctx.draw(false, function () {
-          // get image data from hidden canvas
-          wx.canvasGetImageData({
-            canvasId: hiddenCanvasId,
-            x: imageX,
-            y: imageY,
-            width: frameWidth,
-            height: frameHeight,
-            success(res) {
-              // start
-              var startDate = new Date();
-              // process image
-              tracker.track(res.data, frameWidth, frameHeight);
-              // end
-              var endDate = new Date();
-              console.log('cost time:', endDate - startDate, 'ms');
-            }
+    /* 2019.8.6 Because there is a crash problem on Android Wechat, this code will not be executed temporarily.
+        var _that = this;
+        const ctx = hiddenCanvasContext;
+        // image position
+        const imageX = 0;
+        const imageY = 0;
+        // size ratio
+        frameHeight = (imageHeight / imageWidth) * frameWidth;
+        // option: compress image
+        _that.compressPhoto(resData,
+          imageWidth,
+          imageHeight,
+          frameWidth,
+          frameHeight,
+          function (photoPath) {
+            // draw image on hidden canvas
+            ctx.drawImage(photoPath, imageX, imageY, frameWidth, frameHeight);
+            // waiting for drawing
+            ctx.draw(false, function () {
+              // get image data from hidden canvas
+              wx.canvasGetImageData({
+                canvasId: hiddenCanvasId,
+                x: imageX,
+                y: imageY,
+                width: frameWidth,
+                height: frameHeight,
+                success(res) {
+                  // start
+                  var startDate = new Date();
+                  // process image
+                  tracker.track(res.data, frameWidth, frameHeight);
+                  // end
+                  var endDate = new Date();
+                  console.log('cost time:', endDate - startDate, 'ms');
+                }
+              });
+            });
           });
-        });
-      });
-
+    */
     // We can process images directly, but it will become slow.
+    // 2019.8.6 Because origin image is not compressed, frameWidth is equal to imageWidth. 
+    // size ratio
+    frameWidth = imageWidth;
+    frameHeight = imageHeight;
+    // start
+    var startDate = new Date();
     // process image directly
-    //tracker.track(resData, imageWidth, imageHeight);
-
+    tracker.track(resData, imageWidth, imageHeight);
+    // end
+    var endDate = new Date();
+    console.log('cost time:', endDate - startDate, 'ms');
   },
   startTacking() {
     var _that = this;
@@ -566,7 +564,7 @@ Page({
     });
     // start
     listener.start();
-    console.log('startTacking','listener is start');
+    console.log('startTacking', 'listener is start');
 
     // process
     intervalId = setInterval(function () {
