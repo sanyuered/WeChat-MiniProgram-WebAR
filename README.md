@@ -2,6 +2,9 @@
 
 2. [Chinese Source Code Analysis](https://zhuanlan.zhihu.com/p/74438078)
 
+**2019-8-6 updated:**
+Issue fixed: When function "wx.canvasToTempFilePath" is called frequently on Android Wechat, WeChat will be crashed.
+
 # Introduction of WeChat MiniProgram Web AR 
 
 This is a WeChat Web AR Demo. On July 5, 2019, WeChat miniprogram supports AR. It has been added a new API named "CameraFrameListener".
@@ -129,5 +132,4 @@ const intervalTime = 350;
 ```
 
 ## Known Issues
-
-Face tracker is very slow.
+Face tracker is very slow on iOS WeChat.
