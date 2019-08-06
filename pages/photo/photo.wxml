@@ -17,5 +17,7 @@
        <button type="default" bindtap="changeDirection" class="marginTop10">change camera direction</button>
     </view>
     <view class="page__bd page__bd_spacing">
+      <view class="page__desc">a pattern image below:</view>
+      <image src="../../face.jpg" mode="aspectFit"></image>
     </view>
 </view>

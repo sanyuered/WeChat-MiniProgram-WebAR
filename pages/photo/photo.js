@@ -330,14 +330,14 @@ Page({
   drawImageOnUI(transformData, patternWidth, patternHeight, imageUrl, ctx) {
     var _that = this;
      // avoid to get hidden images existed
-    const offsetLeft = 375;
+    const offsetLeft = canvasWidth;
     const hiddenCtx = wx.createCanvasContext(hiddenCanvasId);
-    hiddenCtx.drawImage(imageUrl, offsetLeft, 0, patternWidth, patternHeight);
+    hiddenCtx.drawImage(imageUrl, 0, 0, patternWidth, patternHeight);
     hiddenCtx.draw(false, function () {
       // get image data of srcImage
       wx.canvasGetImageData({
         canvasId: hiddenCanvasId,
-        x: offsetLeft,
+        x: 0,
         y: 0,
         width: patternWidth,
         height: patternHeight,
@@ -358,7 +358,6 @@ Page({
                 destImage,
                 transformData);
               var itemData = destImage.data;
-
               // convert from black to transparent.
               for (var i = 0; i < itemData.length; i = i + 4) {
                 if (itemData[i] === 0 &&
@@ -376,7 +375,7 @@ Page({
                 width: canvasWidth,
                 height: canvasHeight,
                 data: itemData,
-                success(res) {
+                success(res) {  
                   // get image file path
                   wx.canvasToTempFilePath({
                     x: offsetLeft,
@@ -393,6 +392,7 @@ Page({
                       console.log('drawImageOnUI', 'completed');
                     }
                   });
+            
                 },
                 fail(errorMsg) {
                   console.log('drawImageOnUI', errorMsg);
