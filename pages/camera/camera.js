@@ -77,15 +77,19 @@ Page({
       var heightRatio = canvasHeight / frameHeight;
       // draw tracking points
       event.data.forEach(function (rect) {
-        // scale
-        rect.x = Math.round(rect.x * widthRatio);
-        rect.y = Math.round(rect.y * heightRatio);
-        rect.width = Math.round(rect.width * widthRatio);
-        rect.height = Math.round(rect.height * heightRatio);
         // custom Color
         if (rect.color === 'custom') {
           rect.color = tracker.customColor;
         }
+        // scale
+        rect.x = Math.round(rect.x * widthRatio);
+        // 2019.8.7
+        if(canvasHeight === 458){
+          // This will cause an offset on android wechat. The number "458" is camera height in file "camera.wxss".
+          rect.y = Math.round(rect.y * heightRatio);
+        }
+        rect.width = Math.round(rect.width * widthRatio);
+        rect.height = Math.round(rect.height * heightRatio);
         // draw rect
         ctx.strokeStyle = rect.color;
         ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
@@ -93,7 +97,6 @@ Page({
         ctx.fillText('x:' + rect.x, rect.x + rect.width + 5, rect.y + 11);
         ctx.fillText('y:' + rect.y, rect.x + rect.width + 5, rect.y + 22);
       });
-
       ctx.draw();
     });
     // start
@@ -371,7 +374,7 @@ Page({
                 srcImage,
                 destImage,
                 transformData);
-              var itemData = destImage.data;      
+              var itemData = destImage.data;
               // convert from black to transparent.
               for (var i = 0; i < itemData.length; i = i + 4) {
                 if (itemData[i] === 0 &&
@@ -445,47 +448,47 @@ Page({
       listener.stop();
     }
   },
-   /* 20.619.8 Because function "wx.canvasToTempFilePath()" will cause a crash problem on Android Wechat, this code will not be executed temporarily.
-  compressPhoto(resData,
-    imageWidth,
-    imageHeight,
-    frameWidth,
-    frameHeight,
-    callback) {
-    var _that = this;
-    // image position
-    const imageX = 0;
-    const imageY = 0;
-    const ctx = hiddenCanvasContext;
-    wx.canvasPutImageData({
-      canvasId: hiddenCanvasId,
-      x: imageX,
-      y: imageY,
-      width: imageWidth,
-      height: imageHeight,
-      data: resData,
-      success(res) {
-        wx.canvasToTempFilePath({
-          x: imageX,
-          y: imageY,
-          width: imageWidth,
-          height: imageHeight,
-          destWidth: frameWidth,
-          destHeight: frameHeight,
-          canvasId: hiddenCanvasId,
-          success(res) {
-            if (typeof callback === 'function') {
-              callback(res.tempFilePath);
-            }
-          }
-        });
-      },
-      fail(error) {
-        console.log('canvasPutImageData', error);
-      }
-    });
-  },
-  */
+  /* 20.619.8 Because function "wx.canvasToTempFilePath()" will cause a crash problem on Android Wechat, this code will not be executed temporarily.
+ compressPhoto(resData,
+   imageWidth,
+   imageHeight,
+   frameWidth,
+   frameHeight,
+   callback) {
+   var _that = this;
+   // image position
+   const imageX = 0;
+   const imageY = 0;
+   const ctx = hiddenCanvasContext;
+   wx.canvasPutImageData({
+     canvasId: hiddenCanvasId,
+     x: imageX,
+     y: imageY,
+     width: imageWidth,
+     height: imageHeight,
+     data: resData,
+     success(res) {
+       wx.canvasToTempFilePath({
+         x: imageX,
+         y: imageY,
+         width: imageWidth,
+         height: imageHeight,
+         destWidth: frameWidth,
+         destHeight: frameHeight,
+         canvasId: hiddenCanvasId,
+         success(res) {
+           if (typeof callback === 'function') {
+             callback(res.tempFilePath);
+           }
+         }
+       });
+     },
+     fail(error) {
+       console.log('canvasPutImageData', error);
+     }
+   });
+ },
+ */
   processPhoto(resData, imageWidth, imageHeight) {
     /* 2019.8.6 Because there is a crash problem on Android Wechat, this code will not be executed temporarily.
         var _that = this;
@@ -561,24 +564,21 @@ Page({
       resData = new Uint8ClampedArray(res.data);
       resWidth = res.width;
       resHeight = res.height;
+      // set canvas height
+      if(canvasHeight === 0){
+        canvasHeight = Math.round(canvasWidth * (resHeight/resWidth));
+      }
     });
     // start
     listener.start();
     console.log('startTacking', 'listener is start');
-
     // process
     intervalId = setInterval(function () {
       if (!resData) {
         return;
       }
-      // canvas Height
-      if (canvasHeight === 0) {
-        canvasHeight = Math.round(canvasWidth * (resHeight / resWidth));
-        return;
-      }
       _that.processPhoto(resData, resWidth, resHeight);
     }, intervalTime);
-
   },
   initTracking(type) {
     if (type === 'colorTracker') {
