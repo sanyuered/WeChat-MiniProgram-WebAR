@@ -8,6 +8,8 @@
 | - | - | - |
 | 2019-08-17 | Update | The project structure has been modified. The color tracker and object tracker are removed. Fix "access a camera" mode that is not work properly on Android. |
 | 2019-08-06 | Fix Issue | When function "wx.canvasToTempFilePath" is called frequently on Android Wechat, WeChat will be crashed. |
+| 2019-08-01 | Update | The perspective transform is achieved. |
+| 2019-07-08 | New | The affine transform is achieved. |
 
 # Introduction of WeChat MiniProgram Web AR 
 
@@ -29,22 +31,6 @@ The Demo includes color tracker, face tracker, image tracker and object tracker.
 
 ![avatar](screenshot/indexpage.jpg)
 
-## Color Tracker
-
-Use the Demo to scan the picture below.
-
-![avatar](screenshot/colortracker1.jpg)
-
-Expect the effect below.
-
-Use "Take a Photo" mode.
-
-![avatar](screenshot/colortracker2.jpg)
-
-Use "Access a camera" mode.
-
-![avatar](screenshot/colortracker3.jpg)
-
 ## Face Tracker
 
 Use the Demo to scan people's face.
@@ -56,8 +42,6 @@ Expect the effect below.
 Use "Take a Photo" mode.
 
 ![avatar](screenshot/facetracker.jpg)
-
-**2019-8-1 updated:**
 
 When face recognition is not exact, the result is not good.
 
@@ -97,8 +81,6 @@ Expected:
 
 ![avatar](screenshot/imagetracker1.jpg)
 
-**2019-8-1 updated:**
-
 Use the Demo to scan a perspective picture below.
 
 ![avatar](screenshot/2_perspective.jpg)
@@ -107,7 +89,23 @@ Expected:
 
 ![avatar](screenshot/imagetracker_perspective.jpg)
 
-## Object Tracker (Not recommended)
+## Color Tracker (Removed)
+
+Use the Demo to scan the picture below.
+
+![avatar](screenshot/colortracker1.jpg)
+
+Expect the effect below.
+
+Use "Take a Photo" mode.
+
+![avatar](screenshot/colortracker2.jpg)
+
+Use "Access a camera" mode.
+
+![avatar](screenshot/colortracker3.jpg)
+
+## Object Tracker (Removed)
 
 There will be a rect aboves people's mouth. It is slow and not better than face tracker. 
 
