@@ -1,13 +1,26 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/photo/photo",
-    "pages/camera/camera"
+    "pages/index/index"
+  ],
+  "subpackages": [
+    {
+      "root": "package_image_tracker",
+      "pages": [
+        "pages/camera/camera",
+        "pages/photo/photo"
+      ]
+    }, {
+      "root": "package_face_tracker",
+      "pages": [
+        "pages/camera/camera",
+        "pages/photo/photo"
+      ]
+    }
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Wechat AR",
+    "navigationBarTitleText": "Miniprogram AR",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json"
