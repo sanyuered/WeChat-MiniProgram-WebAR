@@ -6,10 +6,10 @@
 
 | Date | Category|Content | 
 | - | - | - |
-| 08-17 | Update | The project structure has been modified. The color tracker and object tracker are removed. Fix "access a camera" mode that is not work properly on Android. |
-| 08-06 | Fix Issue | When function "wx.canvasToTempFilePath" is called frequently on Android Wechat, WeChat will be crashed. |
-| 08-01 | Update | The perspective transform is achieved. |
-| 07-08 | New | The affine transform is achieved. |
+| 2019-8-16 | Update | The project structure has been modified. The color tracker and object tracker are removed. Fix "access a camera" mode that is not work properly on Android. |
+| 2019-8-6 | Fix Issue | When function "wx.canvasToTempFilePath" is called frequently on Android Wechat, WeChat will be crashed. |
+| 2019-8-1 | Update | The perspective transform is achieved. |
+| 2019-7-8 | New | The affine transform is achieved. |
 
 # Introduction of WeChat MiniProgram Web AR 
 
