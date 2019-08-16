@@ -1,0 +1,23 @@
+.page__bd{
+    padding-bottom:0;
+}
+
+camera{
+    width: 375px; 
+    height: 500px;
+    z-index: 1;
+    margin:auto;
+}
+
+.canvas1{
+    width: 375px;   
+    height: 500px;
+    z-index: 2;
+}
+
+.hiddenCanvas{
+    position:fixed;
+    left:1000px;
+    width:800%;
+    height:400%;
+}
