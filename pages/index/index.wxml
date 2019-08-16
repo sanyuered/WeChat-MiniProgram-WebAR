@@ -1,45 +1,41 @@
 <view class="page">
-    <view class="page__bd page__bd_spacing">
-        <view class="page__title">Wechat AR Demo</view>
-     
-        <view class="page__desc">Color Tracker</view>
+    <view class="page__bd">
+        <!-- Image Tracker -->
+        <view class="weui-panel">
+            <view class="weui-panel__hd">Image Tracker</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">This is a NTF(Natural Feature Tracking) demo.</view>
+                    <view class="weui-media-box__info">
+                        <navigator url="/package_image_tracker/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="primary">Access a camera</button>
+                        </navigator>
 
-        <navigator url="/pages/camera/camera?type=colorTracker" class="marginTop10">
-            <button class="weui-btn" type="primary">Access a camera</button>
-        </navigator>
+                        <navigator url="/package_image_tracker/pages/photo/photo" class="marginTop10">
+                            <button class="weui-btn">Take a photo</button>
+                        </navigator>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <!-- Face Tracker -->
+        <view class="weui-panel marginTop10">
+            <view class="weui-panel__hd">Face Tracker</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">This is a face detection demo.</view>
+                    <view class="weui-media-box__info">
+                        <navigator url="/package_face_tracker/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="primary">Access a camera</button>
+                        </navigator>
 
-        <navigator url="/pages/photo/photo?type=colorTracker" class="marginTop10">
-            <button class="weui-btn">Take a photo</button>
-        </navigator>
+                        <navigator url="/package_face_tracker/pages/photo/photo" class="marginTop10">
+                            <button class="weui-btn">Take a photo</button>
+                        </navigator>
 
-        <view class="page__desc marginTop10">Face Tracker</view>
-
-        <navigator url="/pages/camera/camera?type=faceTracker" class="marginTop10">
-            <button class="weui-btn" type="primary">Access a camera</button>
-        </navigator>
-
-        <navigator url="/pages/photo/photo?type=faceTracker" class="marginTop10">
-            <button class="weui-btn">Take a photo</button>
-        </navigator>
-
-        <view class="page__desc marginTop10">Image Tracker</view>
-
-        <navigator url="/pages/camera/camera?type=imageTracker" class="marginTop10">
-            <button class="weui-btn" type="primary">Access a camera</button>
-        </navigator>
-
-        <navigator url="/pages/photo/photo?type=imageTracker" class="marginTop10">
-            <button class="weui-btn">Take a photo</button>
-        </navigator>
-
-        <view class="page__desc marginTop10">Object Tracker（Not recommended）</view>
-
-        <navigator url="/pages/camera/camera?type=objectTracker" class="marginTop10">
-            <button class="weui-btn" type="primary">Access a camera</button>
-        </navigator>
-
-        <navigator url="/pages/photo/photo?type=objectTracker" class="marginTop10">
-            <button class="weui-btn">Take a photo</button>
-        </navigator>
+                    </view>
+                </view>
+            </view>
+        </view>
     </view>
 </view>
