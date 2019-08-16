@@ -6,6 +6,9 @@
 
 Issue fixed: When function "wx.canvasToTempFilePath" is called frequently on Android Wechat, WeChat will be crashed.
 
+|1|2|3|
+||||
+
 # Introduction of WeChat MiniProgram Web AR 
 
 This is a WeChat Web AR Demo. On July 5, 2019, WeChat miniprogram supports AR. It has been added a new API named "CameraFrameListener".
