@@ -2,14 +2,12 @@
 
 2. [Chinese Source Code Analysis](https://zhuanlan.zhihu.com/p/74438078)
 
-**2019-8-6 updated:**
+# Updated 
 
-Issue fixed: When function "wx.canvasToTempFilePath" is called frequently on Android Wechat, WeChat will be crashed.
-
-|1|2|3|
-| -- | -- | -- |
-| 1 | 2 | 3 |
-
+| Date | Category|Content | Author |
+| - | - | - | - |
+| 2019-08-17 | Update | The project structure has been modified. The color tracker and object tracker are removed. Fix "access a camera" mode that is not work properly on Android. | sanyuered |
+| 2019-08-06 | Fix Issue | When function "wx.canvasToTempFilePath" is called frequently on Android Wechat, WeChat will be crashed. | sanyuered |
 
 # Introduction of WeChat MiniProgram Web AR 
 
@@ -138,4 +136,4 @@ const intervalTime = 350;
 ```
 
 ## Known Issues
-Face tracker is very slow on iOS WeChat.
+Image tracker and face tracker are very slow on iOS WeChat.
