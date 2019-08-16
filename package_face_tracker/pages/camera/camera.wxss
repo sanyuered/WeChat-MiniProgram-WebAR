@@ -1,0 +1,30 @@
+.page__bd{
+    padding-bottom:0;
+}
+
+.camera_Android{
+    width: 288px; 
+    height: 384px;
+    z-index: 1;
+    margin:auto;
+}
+
+.camera_iOS{
+    width: 288px; 
+    height: 352px;
+    z-index: 1;
+    margin:auto;
+}
+
+.canvas1{
+    width: 100%;    
+    height: 100%;
+    z-index: 2;
+}
+
+.hiddenCanvas{
+    position:fixed;
+    left:1000px;
+    width:800%;
+    height:400%;
+}
