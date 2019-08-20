@@ -4,9 +4,8 @@
 
 ## Updated 
 
-| Date     | Update |
-|----------|--------|
-| 2018-04-10 | sss|
+| Date　　 | Update |
+| -- | -- |
 | 2019-08-16 | Update: The project structure has been modified. The color tracker and object tracker are removed. Fix "access a camera" mode that is not work properly on Android. |
 | 2019-08-06 | Fix Issue: When function "wx.canvasToTempFilePath" is called frequently on Android Wechat, WeChat will be crashed. |
 | 2019-08-01 | Update: The perspective transform is achieved. |
