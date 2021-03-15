@@ -2659,6 +2659,14 @@ var tracking = {};
       }
     });
 
+    // 2021.3.14 added
+    return {
+      data: {
+        faces : faces,
+        landmarks : landmarks
+      },
+    };
+
   }
 
 }());

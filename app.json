@@ -6,13 +6,11 @@
     {
       "root": "package_image_tracker",
       "pages": [
-        "pages/camera/camera",
         "pages/photo/photo"
       ]
     }, {
       "root": "package_face_tracker",
       "pages": [
-        "pages/camera/camera",
         "pages/photo/photo"
       ]
     }

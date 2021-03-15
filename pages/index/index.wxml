@@ -1,0 +1,33 @@
+<view class="page">
+    <view class="page__bd">
+        <!-- Image AR -->
+        <view class="weui-panel">
+            <view class="weui-panel__hd">Image AR</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">This is a NTF(Natural Feature Tracking) demo.</view>
+                    <view class="weui-media-box__info">
+                        <navigator url="/package_image_tracker/pages/photo/photo" class="marginTop10">
+                            <button class="weui-btn" type="primary">Take a photo</button>
+                        </navigator>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <!-- Face AR -->
+        <view class="weui-panel marginTop10">
+            <view class="weui-panel__hd">Face AR</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">This is a face detection demo.</view>
+                    <view class="weui-media-box__info">
+                        <navigator url="/package_face_tracker/pages/photo/photo" class="marginTop10">
+                            <button class="weui-btn"  type="primary">Take a photo</button>
+                        </navigator>
+
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

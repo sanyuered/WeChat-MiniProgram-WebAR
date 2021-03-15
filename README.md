@@ -6,133 +6,129 @@
 
 | Date　　　| Update |
 | -- | -- |
+| 2021-03-15 | New: The display of the AR mask is changed from 2D to 3D by three.js. Update: Because the "access a camera" mode is slow, it is removed. |
 | 2019-08-16 | Update: The project structure has been modified. The color tracker and object tracker are removed. Fix "access a camera" mode that does not work properly on Android. |
 | 2019-08-06 | Fix Issue: When function "wx.canvasToTempFilePath" is called frequently on Android Wechat, WeChat will be crashed. |
 | 2019-08-01 | Update: The perspective transform is achieved. |
 | 2019-07-15 | Update: The NFT(Natural Feature Tracking) is achieved. |
 | 2019-07-08 | New: The affine transform is achieved. |
 
-## Introduction of WeChat MiniProgram Web AR 
+## Introduction of WeChat Web AR 
 
 This is a WeChat Web AR Demo. On July 5, 2019, WeChat miniprogram supports AR. It has been added a new API named "CameraFrameListener".
 
 [CameraFrameListener API](https://developers.weixin.qq.com/miniprogram/dev/api/media/camera/CameraContext.onCameraFrame.html)
 
-We can create AR effects with the new API. This demo demonstrates a color tracker effect using "tracking.js" and "jsfeat" library. 
+We can create AR effects with the new API. This demo demonstrates a AR tracker effect using "tracking.js" and "jsfeat" library. 
 
-The "tracking.js" brings computer vision algorithms and techniques into browser environment. We can do real-time color tracking, face detection and much more.
+The "tracking.js" brings computer vision algorithms and techniques into browser environment. The "jsfeat" is also a JavaScript computer vision library.  We can do real-time image and face detection.
 
-[tracking.js](https://trackingjs.com/)
+[tracking.js](https://trackingjs.com/) and [JSFeat](https://inspirit.github.io/jsfeat/)
 
-The "jsfeat" is a JavaScript computer vision library. 
+Index Page of the WeChat Mini-program
 
-[JSFeat](https://inspirit.github.io/jsfeat/)
+![avatar](screenshot/index.jpg)
 
-The Demo includes color tracker, face tracker, image tracker and object tracker. There are two modes for each item. It includes 'taking a photo' and 'access a camera'.
+## Image AR
 
-![avatar](screenshot/indexpage.jpg)
+Use the demo to scan a pattern image below. 
 
-## Face Tracker
+![avatar](face_pattern.jpg)
 
-Use the Demo to scan people's face.
+A cat beard is on the pattern image.
 
-![avatar](face.jpg)
+![avatar](screenshot/1-1.jpg)
 
-Expect the effect below.
+A effect of translating and scaling.
 
-Use "Take a Photo" mode.
+![avatar](screenshot/1-2.jpg)
 
-![avatar](screenshot/facetracker.jpg)
+A effect of rotating.
 
-When face recognition is not exact, the result is not good.
+![avatar](screenshot/1-3.jpg)
 
-![avatar](screenshot/facetracker_perspective1.jpg)
+## Face AR
 
-When face recognition is exact, the result is good.
+Use the demo to scan a face. Expect a effect below.
 
-![avatar](screenshot/facetracker_perspective2.jpg)
+![avatar](screenshot/2-1.jpg)
 
-## Image Tracker
+A effect of translating and scaling.
 
-a sample pattern picture is below.
+![avatar](screenshot/2-2.jpg)
 
-![avatar](face.jpg)
+Because landmarks of the demo are simple and basic, only a effect of translating and scaling on a rotating image.
 
-Use the Demo to scan a rotate picture below.
+![avatar](screenshot/2-3.jpg)
 
-![avatar](screenshot/2_rotate.jpg)
+## How to replace the "cat beard" image
 
-Expected:
+You may replace the default url of a image for 2D mask.
 
-![avatar](screenshot/imagetracker2.jpg)
+File: /package_image_tracker/pages/photo/photo.js and package_face_tracker/pages/photo/photo.js
 
-Use the Demo to scan a skew picture below.
-
-![avatar](screenshot/2_skew.jpg)
-
-Expected:
-
-![avatar](screenshot/imagetracker3.jpg)
-
-Use the Demo to scan a translate and scale picture below.
-
-![avatar](screenshot/2_translate_scale.jpg)
-
-Expected:
-
-![avatar](screenshot/imagetracker1.jpg)
-
-Use the Demo to scan a perspective picture below.
-
-![avatar](screenshot/2_perspective.jpg)
-
-Expected:
-
-![avatar](screenshot/imagetracker_perspective.jpg)
-
-## Color Tracker (Removed)
-
-Use the Demo to scan the picture below.
-
-![avatar](screenshot/colortracker1.jpg)
-
-Expect the effect below.
-
-Use "Take a Photo" mode.
-
-![avatar](screenshot/colortracker2.jpg)
-
-Use "Access a camera" mode.
-
-![avatar](screenshot/colortracker3.jpg)
-
-## Object Tracker (Removed)
-
-There will be a rect aboves people's mouth. It is slow and not better than face tracker. 
-
-## How to improve performance
-
-Face tracker is slow, but we can do some thing to improve speed. For example, we can blur image, grayscale image, sobel image, compress image and so on. After testing, we found that reducing image size is more proper. When image size is reduced, the parameters of tracker needs to be updated.
-
-frame size of camera: the image size is smaller, the tracker's speed is faster.
 ```javascript
-const frameWidth = 150;
+// a url of sprite image
+const modelUrl = '../../utils/cat_beard.png';
 ```
 
-face tracker parameter：the "initialScale" is bigger, the face tracker's speed is faster.
+The width and height of the "modelurl" image should be 256 x 256, 512 x 512 and 1024 x 1024 etc.
+
+## How to replace the pattern image for Image AR
+
+File: /package_face_tracker/utils/imageBusiness.js
+
 ```javascript
-const initialScale = 2;
+const patternImageUrl = '../../../face_pattern.jpg';
 ```
 
-color tracker parameter：the "minDimension" is bigger, the color tracker's speed is faster.
+a pattern image
+
+![avatar](face_pattern.jpg)
+
+## How to put a image on other positions for Image AR
+
+Select a track point on a pattern image, the point is used to set the "cat beard" image.
+
+File: /package_image_tracker/utils/modelBusiness.js
+
 ```javascript
-const minDimension = 4;
+// a index of a track point on a pattern image
+const trackPoint = { 
+    x: 185, // the width of the pattern image is 375
+    y: 224, // the height of the pattern image is 375
+};
 ```
 
-interval time: interval time should be greater than cost time. The unit is milliseconds.
+## How to put a image on other positions for Face AR
+
+This is a map of the 31 keypoints of a face.
+
+landmarks
+
+![avatar](screenshot/3.jpg)
+
+For example, a number 27 and number 29 are the sides of the mouth.
+
+File: /package_face_tracker/utils/modelBusiness.js
+
 ```javascript
-const intervalTime = 350;
+// index of the track points of the face
+const trackPointA = {
+    // index of a landmark
+    id: 27,
+    // X coordinate
+    x: 155.69898111309, // the width of the face image is 375
+};
+const trackPointB = {
+    // index of a landmark
+    id: 29,
+    // X coordinate
+    x: 216.53075265284997, // the width of the face image is 375
+};
 ```
 
 ## Known Issues
-Image tracker and face tracker are very slow on iOS WeChat.
+
+The AR demo is slow on iOS WeChat.
+
