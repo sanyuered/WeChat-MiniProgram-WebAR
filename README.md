@@ -6,6 +6,7 @@
 
 | Date　　　| Update |
 | -- | -- |
+| 2021-04-03 | Update: The "access a camera" mode of Image AR is recoverd. |
 | 2021-03-15 | New: The display of the AR mask is changed from 2D to 3D by three.js. Update: Because the "access a camera" mode is slow, it is removed. |
 | 2019-08-16 | Update: The project structure has been modified. The color tracker and object tracker are removed. Fix "access a camera" mode that does not work properly on Android. |
 | 2019-08-06 | Fix Issue: When function "wx.canvasToTempFilePath" is called frequently on Android Wechat, WeChat will be crashed. |

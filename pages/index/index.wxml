@@ -10,6 +10,9 @@
                         <navigator url="/package_image_tracker/pages/photo/photo" class="marginTop10">
                             <button class="weui-btn" type="primary">Take a photo</button>
                         </navigator>
+                         <navigator url="/package_image_tracker/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="primary">Access a camera</button>
+                        </navigator>
                     </view>
                 </view>
             </view>

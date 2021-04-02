@@ -28,7 +28,7 @@
     "compileHotReLoad": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
-    "useApiHostProcess": true,
+    "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -45,7 +45,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.9.5",
-  "appid": "wxb4cdacc73d2d71c7",
+  "appid": "wx9222f90024d17a42",
   "projectname": "WeChat-WebAR",
   "debugOptions": {
     "hidedInDevtools": []

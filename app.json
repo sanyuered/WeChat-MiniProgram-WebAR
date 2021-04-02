@@ -6,7 +6,8 @@
     {
       "root": "package_image_tracker",
       "pages": [
-        "pages/photo/photo"
+        "pages/photo/photo",
+        "pages/camera/camera"
       ]
     }, {
       "root": "package_face_tracker",

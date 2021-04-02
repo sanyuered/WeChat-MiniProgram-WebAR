@@ -1,0 +1,20 @@
+<view class="page">
+    <view>
+      <camera 
+        device-position="{{devicePosition}}" 
+        flash="off" 
+        frame-size="small"
+        binderror="error">
+       <canvas
+          id="canvasWebGL"
+          class="canvasWebGL"
+          type="webgl"
+          disable-scroll="true">
+        </canvas> 
+      </camera>
+      <button type="default" bindtap="changeDirection" class="marginTop10">change camera direction</button>
+    </view>
+    <view class="page__bd page__bd_spacing">
+    </view>
+    <canvas canvas-id="hiddenCanvas" class="hiddenCanvas"></canvas>
+</view>

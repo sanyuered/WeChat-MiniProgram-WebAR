@@ -22,7 +22,7 @@ const sc_inc = Math.sqrt(2.0);
 
 function detect(frame, width, height, callback) {
     if (!tracker) {
-        console.log('detect', 'waiting initing tracker.');
+        console.log('detect:', 'waiting for the tracker initing to complete.');
         return;
     }
     var result = tracker.track(frame, width, height);
