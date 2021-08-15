@@ -1,14 +1,17 @@
-const image = require('../../utils/imageBusiness.js')
-const model = require('../../utils/cameraModelBusiness.js');
+const image = require('../../utils/imageBusiness.js');
+const model = require('../../utils/modelBusiness.js');
 const canvasWebGLId = 'canvasWebGL';
 // throttling for Android
 var cameraFrameMax = 20;
-// set a url of a gltf model 
-const modelUrl = 'https://m.sanyue.red/demo/gltf/sunglass.glb';
-// a camera listener
-var listener = null;
+// a url of sprite image
+const modelUrl = '../../utils/cat_beard.png';
 
 Page({
+    // throttling for Android
+    intervalTimeout: 200,
+    intervalId: null,
+    // a camera listener
+    listener: null,
     data: {
         devicePosition: 'back',
     },
@@ -17,21 +20,19 @@ Page({
         // if iOS
         if (system.indexOf('iOS') !== -1) {
             // throttling for iOS
-            cameraFrameMax = 125;
-            var message = 'Slow on iOS.';
-            wx.showToast({
-                title: message,
-                icon: 'none'
-            });
+            cameraFrameMax = 4000;
         }
     },
-    async onLoad() {
+    onLoad() {
         var _that = this;
-        // load 3d model
-        model.initThree(canvasWebGLId, modelUrl);
-        await image.initTracker();
-        // the camera listener is going to start to track
-        _that.startTacking();
+        // waiting for dom completed
+        setTimeout(function () {
+            // load 3d model
+            model.initThree(canvasWebGLId, modelUrl);
+            image.initTracker();
+            // the camera listener is going to start to track
+            _that.startTacking();
+        }, 150);
     },
     onUnload: function () {
         this.stopTacking();
@@ -40,55 +41,64 @@ Page({
         model.stopAnimate();
         model.dispose();
     },
+    onCameraFrame_callback(resData,
+        canvasWidth,
+        canvasHeight) {
+ // process start
+ image.detect(resData,
+    canvasWidth,
+    canvasHeight,
+    function (event) {
+        var result = event.data;
+        if (result && result.prediction) {
+            // set the rotation and position of the 3d model.    
+            model.setModel(result.prediction,
+                canvasWidth,
+                canvasHeight);
+        } else {
+            var message = 'No results.';
+            wx.showToast({
+                title: message,
+                icon: 'none'
+            });
+        }
+
+    });
+// process end
+        },
     startTacking() {
         var _that = this;
-        var count = 0;
         const context = wx.createCameraContext();
 
-        // real-time
-        listener = context.onCameraFrame(async function (res) {
-            // this is throttling
-            if (count < cameraFrameMax) {
-                count++;
-                return;
-            }
-            count = 0;
+         // real-time
+         var frameData;
+         var canvasWidth;
+         var canvasHeight;
+        this.listener = context.onCameraFrame(function (res) {
+            frameData = new Uint8ClampedArray(res.data);
+            canvasWidth = res.width;
+            canvasHeight = res.height;
             console.log('onCameraFrame:', res.width, res.height);
-            var resData = new Uint8ClampedArray(res.data);
-            var canvasWidth = res.width;
-            var canvasHeight = res.height;
-
-            // process start
-            image.detect(resData,
-                canvasWidth,
-                canvasHeight,
-                function (event) {
-                    var result = event.data;
-                    if (result && result.prediction) {
-                        // set the rotation and position of the 3d model.    
-                        model.setModel(result.prediction,
-                            canvasWidth,
-                            canvasHeight);
-                    } else {
-                        var message = 'No results.';
-                        wx.showToast({
-                            title: message,
-                            icon: 'none'
-                        });
-                    }
-
-                });
-            // process end
-
         });
+
+        this.intervalId = setInterval(function () {
+            if (frameData) {
+                _that.onCameraFrame_callback(frameData,
+                    canvasWidth,
+                    canvasHeight);
+            }
+        }, this.intervalTimeout);
+
         // start
-        listener.start();
+        this.listener.start();
         console.log('startTacking', 'listener is running');
     },
     stopTacking() {
-        if (listener) {
-            listener.stop();
+        if (this.listener) {
+            this.listener.stop();
+            this.listener = null;
         }
+        clearInterval(this.intervalId);
     },
     changeDirection() {
         var status = this.data.devicePosition;

@@ -28,6 +28,8 @@ function initThree(canvasId, modelUrl) {
 
 function initScene() {
     camera = new THREE.OrthographicCamera(1, 1, 1, 1, -1000, 1000);
+    // set the camera
+    setSize();
     scene = new THREE.Scene();
     // ambient light
     scene.add(new THREE.AmbientLight(0xffffff));
@@ -53,14 +55,15 @@ function loadModel(modelUrl) {
     wx.showLoading({
         title: 'Loading Sprite...',
     });
-    const sprite_map = new THREE.TextureLoader().load(modelUrl);
-    const sprite_material = new THREE.SpriteMaterial({ map: sprite_map });
-    var sprite = new THREE.Sprite(sprite_material);
-    sprite.scale.setScalar(initScale);
-    mainModel = sprite;
+    const texture1 = new THREE.TextureLoader().load(modelUrl);
+    const material1 = new THREE.MeshBasicMaterial({ map: texture1, transparent: true });
+    const geometry1 = new THREE.PlaneGeometry(1, 1);
+    const plane1 = new THREE.Mesh(geometry1, material1);
+    plane1.scale.setScalar(initScale);
+    mainModel = plane1;
     scene.add(mainModel);
-    wx.hideLoading();
     console.log('loadModel', 'success');
+    wx.hideLoading();
 }
 
 function updateModel(modelUrl) {
@@ -68,19 +71,19 @@ function updateModel(modelUrl) {
     wx.showLoading({
         title: 'Loading Sprite...',
     });
-    // sprite
-    const sprite_map = new THREE.TextureLoader().load(modelUrl);
-    const sprite_material = new THREE.SpriteMaterial({ map: sprite_map });
-    var sprite = new THREE.Sprite(sprite_material);
-    sprite.scale.setScalar(initScale);
+    const texture1 = new THREE.TextureLoader().load(modelUrl);
+    const material1 = new THREE.MeshBasicMaterial({ map: texture1, transparent: true });
+    const geometry1 = new THREE.PlaneGeometry(1, 1);
+    const plane1 = new THREE.Mesh(geometry1, material1);
+    plane1.scale.setScalar(initScale);
     // remove old model
     scene.remove(mainModel);
     // save new model
-    mainModel = sprite;
+    mainModel = plane1;
     // add new model
     scene.add(mainModel);
-    wx.hideLoading();
     console.log('updateModel', 'success');
+    wx.hideLoading();
 }
 
 function setSize() {
@@ -110,7 +113,6 @@ function setModel(prediction,
         return;
     }
     var transform = prediction.transform.data;
-
     // position
     var target = getTranslation(transform, 
         trackPoint.x, 
@@ -122,10 +124,7 @@ function setModel(prediction,
     var r = getRotationAndScale(transform);
     var rotationMatrix = new THREE.Matrix4();
     rotationMatrix.fromArray(r.rotation);
-    var rotation = new THREE.Euler();
-    rotation.setFromRotationMatrix(rotationMatrix);
-    console.log('rotation.z', rotation.z);
-    mainModel.material.rotation = rotation.z;
+    mainModel.rotation.setFromRotationMatrix(rotationMatrix);
 
     // scale
     mainModel.scale.setScalar(initScale * r.scale);

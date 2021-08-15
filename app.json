@@ -9,7 +9,15 @@
         "pages/photo/photo",
         "pages/camera/camera"
       ]
-    }, {
+    },
+    {
+      "root": "package_video_tracker",
+      "pages": [
+        "pages/photo/photo",
+        "pages/camera/camera"
+      ]
+    },
+    {
       "root": "package_face_tracker",
       "pages": [
         "pages/photo/photo"

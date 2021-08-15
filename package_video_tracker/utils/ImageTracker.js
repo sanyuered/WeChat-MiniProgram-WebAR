@@ -25,15 +25,17 @@ ImageTracker.prototype.track = function (pixels, width, height) {
   if (!patterns) {
     console.log('Pattern not specified.');
     return;
-  } // start
+  }  
+  
+  // start
+  var start = new Date();
+  var results = _that.trackImage_(patterns, pixels, width, height);
+  // end
+  var end = new Date() - start;
+  console.log('detect', end, 'ms');
+  results.end = end;
 
-
-  var startTime = new Date();
-
-  var results = _that.trackImage_(patterns, pixels, width, height); // end
-
-
-  console.log('detect time:', new Date() - startTime, 'ms'); // optional
+  // optional
 
   this.emit('track', {
     data: results

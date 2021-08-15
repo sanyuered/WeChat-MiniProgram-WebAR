@@ -6,6 +6,7 @@
 
 | Date　　　| Update |
 | -- | -- |
+| 2021-08-15 | New: Added a video mask mode for image AR. This is a CSS 3D transformation, which does not require three.js. Please see "Image AR and Video Mask". Update: Replace the spirit geometry with a plane geometry. |
 | 2021-04-03 | Update: The "access a camera" mode of Image AR is recoverd. |
 | 2021-03-15 | New: The display of the AR mask is changed from 2D to 3D by three.js. Update: Because the "access a camera" mode is slow, it is removed. |
 | 2019-08-16 | Update: The project structure has been modified. The color tracker and object tracker are removed. Fix "access a camera" mode that does not work properly on Android. |
@@ -30,7 +31,7 @@ Index Page of the WeChat Mini-program
 
 ![avatar](screenshot/index.jpg)
 
-## Image AR
+## Image AR and 3D Mask
 
 Use the demo to scan a pattern image below. 
 
@@ -48,6 +49,16 @@ A effect of rotating.
 
 ![avatar](screenshot/1-3.jpg)
 
+## Image AR and Video Mask
+
+Use the demo to scan a rotating image below. 
+
+![avatar](screenshot/4-1.jpg)
+
+A video player is on and aligned with the image.
+
+![avatar](screenshot/4-2.jpg)
+
 ## Face AR
 
 Use the demo to scan a face. Expect a effect below.
@@ -58,7 +69,7 @@ A effect of translating and scaling.
 
 ![avatar](screenshot/2-2.jpg)
 
-Because landmarks of the demo are simple and basic, only a effect of translating and scaling on a rotating image.
+Because the landmarks of the demo are simple and basic, only a effect of translating and scaling is on a rotating image.
 
 ![avatar](screenshot/2-3.jpg)
 
@@ -131,5 +142,5 @@ const trackPointB = {
 
 ## Known Issues
 
-The AR demo is slow on iOS WeChat.
+The AR demo is very slow on iOS WeChat.
 

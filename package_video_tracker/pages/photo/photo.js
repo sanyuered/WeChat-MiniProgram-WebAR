@@ -1,35 +1,41 @@
 const image = require('../../utils/imageBusiness.js')
-const model = require('../../utils/modelBusiness.js');
 const canvasId = 'canvas2d';
-const canvasWebGLId = 'canvasWebGL';
 const maxCanvasWidth = 375;
-// a url of a image
-const modelUrl = '../../utils/cat_beard.png';
+// a video
+const videoMaskId = "videoMask";
+// mask image
+const trackPoint = {
+  x: 187, // the width of the pattern image is 375
+  y: 187, // the height of the pattern image is 375
+};
 
 Page({
+  canvasContext: null,
+  canvasDom: null,
+  videoContext: null,
   data: {
-    btnText: 'Take a photo',
-    devicePosition: 'back',
-    // if it is taking a photo
-    isRunning: true,
-    canvasContext: null,
-    canvasDom: null,
+    notice: '',
+    sampleUrl: 'sample.jpg',
+    patternImageUrl: 'face_pattern.jpg',
+    videoUrl: 'https://sanyuered.github.io/imgs/sample.mp4',
+    videoTransform: '',
+    isButtonDisabled: false,
+    isVideoVisible:false,
   },
   onLoad: function () {
     var _that = this;
     // waiting for dom completed
     setTimeout(function () {
-      // load 3d model
-      model.initThree(canvasWebGLId, modelUrl);
       image.initTracker();
       _that.getCanvasOfType2d();
     }, 150);
+    _that.videoContext = wx.createVideoContext(videoMaskId)
   },
   onUnload: function () {
-    model.stopAnimate();
-    model.dispose();
   },
   processPhoto(photoPath, imageWidth, imageHeight, ctx) {
+    var _that = this;
+
     // const ctx = wx.createCanvasContext(canvasId);
     var canvasWidth = imageWidth;
     if (canvasWidth > maxCanvasWidth) {
@@ -50,32 +56,36 @@ Page({
     wx.showLoading({
       title: 'Detecting...',
     });
+    _that.setData({
+      isButtonDisabled: true,
+    });
+
     // process start
     image.detect(res.data,
       canvasWidth,
       canvasHeight,
       function (event) {
         wx.hideLoading();
-        var result = event.data;
+        _that.setData({
+          isButtonDisabled: false,
+        });
 
+        var result = event.data;
         if (result && result.prediction) {
-          // set the rotation and position of the 3d model.    
-          model.setModel(result.prediction,
+          // set the position
+          image.updateMaskVideoPosition(result.prediction,
+            _that,
+            trackPoint,
             canvasWidth,
-            canvasHeight);
-          var frame = {
-            data: new Uint8Array(res.data),
-            width: res.width,
-            height: res.height,
-          };
-          // put the 3d model on the image
-          model.setSceneBackground(frame);
+            canvasHeight)
+          var message = "detect: " + result.prediction.goodMatch + " points, " + result.end + ' ms.';
+          _that.setData({ notice: message });
         } else {
+          // set the default position
+          image.setMaskVideoDefaultPosition(_that);
           var message = 'No results.';
-          wx.showToast({
-            title: message,
-            icon: 'none'
-          });
+          _that.setData({ notice: message });
+          console.log('detect:', message);
         }
       });
     // process end
@@ -109,55 +119,31 @@ Page({
     };
     image.src = imgUrl;
   },
+  playMaskVideo() {
+    this.videoContext.play();
+  },
   takePhoto() {
     var _that = this;
-    const context = wx.createCameraContext();
-
-    if (_that.data.isRunning) {
-      _that.setData({
-        btnText: 'Retry',
-        isRunning: false,
-      });
-
-      // take a photo
-      context.takePhoto({
-        quality: 'normal',
-        success: (res) => {
-          var photoPath = res.tempImagePath;
-
-          _that.createImage(
-            _that.canvasDom,
-            photoPath,
-            function (image) {
-              console.log('size of image:', image.width, image.height);
-              _that.processPhoto(image,
-                image.width,
-                image.height,
-                _that.canvasContext);
-            })
-        }
-      });
+    if (_that.data.isButtonDisabled) {
+      return
     }
-    else {
-      _that.setData({
-        btnText: 'Take a photo',
-        isRunning: true,
-      });
 
-      // clear 3d canvas
-      model.clearSceneBackground();
-    }
-  },
-  changeDirection() {
-    var status = this.data.devicePosition;
-    if (status === 'back') {
-      status = 'front';
-    } else {
-      status = 'back';
-    }
-    this.setData({
-      devicePosition: status,
+    _that.setData({
+      isVideoVisible: true,
     });
+
+    _that.playMaskVideo();
+
+    _that.createImage(
+      _that.canvasDom,
+      _that.data.sampleUrl,
+      function (image) {
+        console.log('size of image:', image.width, image.height);
+        _that.processPhoto(image,
+          image.width,
+          image.height,
+          _that.canvasContext);
+      })
   },
   error(e) {
     console.log(e.detail);

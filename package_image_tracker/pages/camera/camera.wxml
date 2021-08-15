@@ -16,5 +16,6 @@
     </view>
     <view class="page__bd page__bd_spacing">
     </view>
-    <canvas canvas-id="hiddenCanvas" class="hiddenCanvas"></canvas>
+      <!-- canvas v2-->
+    <canvas id="hiddenCanvas" type="2d" class="hiddenCanvas"></canvas>
 </view>

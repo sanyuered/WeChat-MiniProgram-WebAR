@@ -1,0 +1,27 @@
+<view class="page">
+  <view class="imagePlayer">
+      <image id="inputData" src="{{sampleUrl}}" class="camera">
+      </image>
+      <video id="videoMask" 
+      hidden="{{!isVideoVisible}}"
+      loop="true"
+      show-fullscreen-btn="false"
+      show-mute-btn="true"
+      src="{{videoUrl}}"
+      style="{{videoTransform}}" 
+      class="videoMask"   
+      >
+      </video>
+  </view>
+  <view class="page__bd page__bd_spacing">
+     <button hidden="{{isButtonDisabled}}" type="primary" bindtap="takePhoto" class="marginTop10">Detect</button>
+     <view>{{notice}}</view>    
+  </view>
+  <view class="marginTop10">Pattern Image:</view>
+      <image id="patternImage" 
+      src="{{patternImageUrl}}"></image>
+   <!-- canvas v2-->
+  <canvas id="canvas2d" type="2d" class="canvas2d"></canvas>
+   <!-- canvas v2-->
+  <canvas id="hiddenCanvas" type="2d" class="hiddenCanvas"></canvas>
+</view>
