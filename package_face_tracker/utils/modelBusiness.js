@@ -36,6 +36,8 @@ function initThree(canvasId, modelUrl) {
 
 function initScene() {
     camera = new THREE.OrthographicCamera(1, 1, 1, 1, -1000, 1000);
+    // set the camera
+    setSize();
     scene = new THREE.Scene();
     // ambient light
     scene.add(new THREE.AmbientLight(0xffffff));

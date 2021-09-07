@@ -6,7 +6,8 @@
 
 | Date　　　| Update |
 | -- | -- |
-| 2021-08-15 | New: Added a video mask mode for image AR. This is a CSS 3D transformation, which does not require three.js. Please see "Image AR and Video Mask". Update: Replace the spirit geometry with a plane geometry. |
+| 2021-09-07 | New: Added a Color Tracker mode. Please see the "Color AR". |
+| 2021-08-15 | New: Added a video mask mode for image AR. This is a CSS 3D transformation, which does not require three.js. Please see the "Image AR and Video Mask". Update: Replace the spirit geometry with a plane geometry. |
 | 2021-04-03 | Update: The "access a camera" mode of Image AR is recoverd. |
 | 2021-03-15 | New: The display of the AR mask is changed from 2D to 3D by three.js. Update: Because the "access a camera" mode is slow, it is removed. |
 | 2019-08-16 | Update: The project structure has been modified. The color tracker and object tracker are removed. Fix "access a camera" mode that does not work properly on Android. |
@@ -15,9 +16,9 @@
 | 2019-07-15 | Update: The NFT(Natural Feature Tracking) is achieved. |
 | 2019-07-08 | New: The affine transform is achieved. |
 
-## Introduction of WeChat Web AR 
+## Introduction on WeChat Web AR 
 
-This is a WeChat Web AR Demo. On July 5, 2019, WeChat miniprogram supports AR. It has been added a new API named "CameraFrameListener".
+This is a WeChat Web AR. On July 5, 2019, WeChat miniprogram supported AR. It was added a new API named "CameraFrameListener".
 
 [CameraFrameListener API](https://developers.weixin.qq.com/miniprogram/dev/api/media/camera/CameraContext.onCameraFrame.html)
 
@@ -30,6 +31,7 @@ The "tracking.js" brings computer vision algorithms and techniques into browser 
 Index Page of the WeChat Mini-program
 
 ![avatar](screenshot/index.jpg)
+![avatar](screenshot/index_2.jpg)
 
 ## Image AR and 3D Mask
 
@@ -72,6 +74,20 @@ A effect of translating and scaling.
 Because the landmarks of the demo are simple and basic, only a effect of translating and scaling is on a rotating image.
 
 ![avatar](screenshot/2-3.jpg)
+
+## Color AR
+
+Use the demo to scan a yellow color. Expect a effect below.
+
+![avatar](screenshot/5_color.jpg)
+
+A effect of hiddening.
+
+![avatar](screenshot/5_mask.jpg)
+
+Custom the color of the highlighted area.
+
+![avatar](screenshot/5_setting.jpg)
 
 ## How to replace the "cat beard" image
 

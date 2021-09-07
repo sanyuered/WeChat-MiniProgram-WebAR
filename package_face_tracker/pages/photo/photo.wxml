@@ -13,6 +13,8 @@
     <button type="primary" bindtap="takePhoto" class="marginTop10">{{btnText}}</button>
     <button type="default" bindtap="changeDirection" class="marginTop10">change camera direction</button>
   </view>
+  <!-- canvas v1-->
    <canvas canvas-id="canvas2d" class="canvas1"></canvas>
+  <!-- canvas v1-->
   <canvas canvas-id="hiddenCanvas" class="hiddenCanvas"></canvas>
 </view>

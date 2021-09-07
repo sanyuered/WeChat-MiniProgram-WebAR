@@ -22,6 +22,7 @@ Page({
         videoTransform: '',
         isButtonDisabled: false,
         isVideoVisible: false,
+        animationData:null,
     },
     onReady() {
         const system = wx.getSystemInfoSync().system;

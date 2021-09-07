@@ -22,6 +22,13 @@
       "pages": [
         "pages/photo/photo"
       ]
+    },
+    {
+      "root": "package_color_tracker",
+      "pages": [
+        "pages/photo/photo",
+        "pages/camera/camera"
+      ]
     }
   ],
   "window": {

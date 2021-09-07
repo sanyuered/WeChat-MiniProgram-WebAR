@@ -21,6 +21,7 @@ Page({
     videoTransform: '',
     isButtonDisabled: false,
     isVideoVisible:false,
+    animationData:null,
   },
   onLoad: function () {
     var _that = this;

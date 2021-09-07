@@ -5,7 +5,7 @@
             <view class="weui-panel__hd">Image AR and 3D Mask</view>
             <view class="weui-panel__bd">
                 <view class="weui-media-box weui-media-box_text">
-                    <view class="weui-media-box__desc">This is a NTF(Natural Feature Tracking) demo.</view>
+                    <view class="weui-media-box__desc">This is a NFT(Natural Feature Tracking) demo.</view>
                     <view class="weui-media-box__info">
                         <navigator url="/package_image_tracker/pages/photo/photo" class="marginTop10">
                             <button class="weui-btn" type="primary">Take a photo</button>
@@ -22,7 +22,7 @@
             <view class="weui-panel__hd">Image AR and Video Mask</view>
             <view class="weui-panel__bd">
                 <view class="weui-media-box weui-media-box_text">
-                    <view class="weui-media-box__desc">This is a NTF(Natural Feature Tracking) demo.</view>
+                    <view class="weui-media-box__desc">This is a NFT(Natural Feature Tracking) demo.</view>
                     <view class="weui-media-box__info">
                         <navigator url="/package_video_tracker/pages/photo/photo" class="marginTop10">
                             <button class="weui-btn" type="primary">Take a photo</button>
@@ -45,6 +45,23 @@
                             <button class="weui-btn"  type="primary">Take a photo</button>
                         </navigator>
 
+                    </view>
+                </view>
+            </view>
+        </view>
+         <!-- Color Tracker -->
+        <view class="weui-panel">
+            <view class="weui-panel__hd">Color AR</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">This is a Color Tracking demo.</view>
+                    <view class="weui-media-box__info">
+                        <navigator url="/package_color_tracker/pages/photo/photo" class="marginTop10">
+                            <button class="weui-btn" type="primary">Take a photo</button>
+                        </navigator>
+                         <navigator url="/package_color_tracker/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="default">Access a camera</button>
+                        </navigator>
                     </view>
                 </view>
             </view>

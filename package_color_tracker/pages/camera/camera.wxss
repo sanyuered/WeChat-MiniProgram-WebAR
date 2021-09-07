@@ -2,11 +2,11 @@
     padding-bottom:0;
 }
 .page__bd_spacing{
-    padding-top:10px;
+    padding:15px;
 }
 .imagePlayer{
     width: 375px;
-    height: 450px;
+    height: 500px;
     margin: auto;
     position: relative;
     display: flex;
@@ -17,24 +17,11 @@
 .camera{
     position: absolute;
     width: 375px; 
-    height:450px;
+    height:500px;
 }
 
-.videoMask{
+.canvasMask{
     position: absolute;
     width:375px;
-    height:375px;
-    transition: transform 1s;
-}
-
-#patternImage{
-    width:375px;
-    height:375px;
-}
-
-.hiddenCanvas{
-    position:fixed;
-    left:1000px;
-    width:3000px;
-    height:2000px;
+    height:500px;
 }

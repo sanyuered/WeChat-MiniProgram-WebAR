@@ -1,0 +1,66 @@
+<view class="page">
+    <view class="imagePlayer">
+      <camera 
+        device-position="{{devicePosition}}" 
+        class="camera"
+        flash="off" 
+        frame-size="small"
+        binderror="camera_error">
+      </camera>
+       <!-- canvas v2-->
+      <canvas id="canvasMask" type="2d"
+       class="canvasMask" style="{{canvasMaskStyle}}"></canvas>
+    </view>
+<view class="page__bd page__bd_spacing">
+     <view class="page-section-title">Color of the highlighted area：</view>
+       <checkbox-group bindchange="checkboxChange">
+      <label class="checkbox">
+        <checkbox value="yellow" checked="true"/>Yellow(255,255,0)
+      </label>
+      <label class="checkbox">
+        <checkbox value="magenta" />Magenta(255,0,255)
+      </label>
+      <view></view>
+       <label class="checkbox">
+        <checkbox value="cyan" />Cyan(0,255,255)
+      </label>
+        <label class="checkbox">
+        <checkbox value="customColor" />Custom Color({{customColor.r}},{{customColor.g}},{{customColor.b}})
+      </label>
+      </checkbox-group>
+         <slider
+                 min="0" 
+                 max="255"
+                 step="25"
+                 value="{{customColor.r}}"
+                 bindchange="customColor_r_change"
+                 show-value/>
+                     <slider
+                 min="0" 
+                 max="255"
+                 step="25"
+                 value="{{customColor.g}}"
+                 bindchange="customColor_g_change"
+                 show-value/>
+                     <slider
+                 min="0" 
+                 max="255"
+                 step="25"
+                 value="{{customColor.b}}"
+                 bindchange="customColor_b_change"
+                 show-value/>
+
+     <view>Similarity with the custom color：</view>
+                <slider
+                 min="1000" 
+                 max="10000"
+                 step="1000"
+                 value="{{colorRange}}"
+                 bindchange="color_range_change"
+                 show-value/>
+         
+     <button hidden="{{isButtonDisabled}}"
+      bindtap="takePhoto"
+      type="primary">Hide the highlighted text</button> 
+  </view>
+</view>

@@ -1,0 +1,27 @@
+.page__bd{
+    padding-bottom:0;
+}
+.page__bd_spacing{
+    padding:15px;
+}
+.imagePlayer{
+    width: 375px;
+    height: 275px;
+    margin: auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.camera{
+    position: absolute;
+    width: 375px; 
+    height:275px;
+}
+
+.canvasMask{
+    position: absolute;
+    width: 375px; 
+    height:275px;
+}

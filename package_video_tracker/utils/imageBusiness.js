@@ -1,4 +1,3 @@
-const promiseEx = require('../../utils/promiseEx.js');
 
 const ImageTracker = require('ImageTracker.js');
 
@@ -107,11 +106,8 @@ function createImage(canvasDom, imgUrl, callback) {
 
 async function getCanvasContext(image, ctx) {
   patternImageArray = [];
-  /*
-  var res = await promiseEx(wx.getImageInfo, {
-    src: patternImageUrl
-  }); 
-  */
+
+  
   // pattern image temp path
   // tempPatternImagePath = res.path; // pattern image size
 
@@ -120,7 +116,7 @@ async function getCanvasContext(image, ctx) {
 
   if (patternFrameWidth > patternFrameMaxWidth) {
     patternFrameWidth = patternFrameMaxWidth;
-    patternFrameHeight = res.height / res.width * patternFrameMaxWidth;
+    patternFrameHeight = image.height / image.width * patternFrameMaxWidth;
   } // resample width and height
 
   var newWidth = patternFrameWidth;
