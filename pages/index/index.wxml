@@ -1,5 +1,22 @@
 <view class="page">
     <view class="page__bd">
+        <!-- OpenCV AR -->
+        <view class="weui-panel">
+            <view class="weui-panel__hd">Image AR using OpenCV</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">This is a 2D Feature Tracking demo.</view>
+                    <view class="weui-media-box__info">
+                        <navigator url="/package_opencv_tracker/pages/photo/photo" class="marginTop10">
+                            <button class="weui-btn" type="primary">Take a photo</button>
+                        </navigator>
+                        <navigator url="/package_opencv_tracker/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="default">Access a camera</button>
+                        </navigator>
+                    </view>
+                </view>
+            </view>
+        </view>
         <!-- 3D Mask -->
         <view class="weui-panel">
             <view class="weui-panel__hd">Image AR and 3D Mask</view>
@@ -10,7 +27,7 @@
                         <navigator url="/package_image_tracker/pages/photo/photo" class="marginTop10">
                             <button class="weui-btn" type="primary">Take a photo</button>
                         </navigator>
-                         <navigator url="/package_image_tracker/pages/camera/camera" class="marginTop10">
+                        <navigator url="/package_image_tracker/pages/camera/camera" class="marginTop10">
                             <button class="weui-btn" type="default">Access a camera</button>
                         </navigator>
                     </view>
@@ -27,29 +44,15 @@
                         <navigator url="/package_video_tracker/pages/photo/photo" class="marginTop10">
                             <button class="weui-btn" type="primary">Take a photo</button>
                         </navigator>
-                         <navigator url="/package_video_tracker/pages/camera/camera" class="marginTop10">
+                        <navigator url="/package_video_tracker/pages/camera/camera" class="marginTop10">
                             <button class="weui-btn" type="default">Access a camera</button>
                         </navigator>
                     </view>
                 </view>
             </view>
         </view>
-        <!-- Face AR -->
-        <view class="weui-panel marginTop10">
-            <view class="weui-panel__hd">Face AR</view>
-            <view class="weui-panel__bd">
-                <view class="weui-media-box weui-media-box_text">
-                    <view class="weui-media-box__desc">This is a face detection demo.</view>
-                    <view class="weui-media-box__info">
-                        <navigator url="/package_face_tracker/pages/photo/photo" class="marginTop10">
-                            <button class="weui-btn"  type="primary">Take a photo</button>
-                        </navigator>
 
-                    </view>
-                </view>
-            </view>
-        </view>
-         <!-- Color Tracker -->
+        <!-- Color Tracker -->
         <view class="weui-panel">
             <view class="weui-panel__hd">Color AR</view>
             <view class="weui-panel__bd">
@@ -59,9 +62,25 @@
                         <navigator url="/package_color_tracker/pages/photo/photo" class="marginTop10">
                             <button class="weui-btn" type="primary">Take a photo</button>
                         </navigator>
-                         <navigator url="/package_color_tracker/pages/camera/camera" class="marginTop10">
+                        <navigator url="/package_color_tracker/pages/camera/camera" class="marginTop10">
                             <button class="weui-btn" type="default">Access a camera</button>
                         </navigator>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <!-- Face AR -->
+        <view class="weui-panel marginTop10">
+            <view class="weui-panel__hd">Face AR</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">This is a face detection demo.</view>
+                    <view class="weui-media-box__info">
+                        <navigator url="/package_face_tracker/pages/photo/photo" class="marginTop10">
+                            <button class="weui-btn" type="primary">Take a photo</button>
+                        </navigator>
+
                     </view>
                 </view>
             </view>
