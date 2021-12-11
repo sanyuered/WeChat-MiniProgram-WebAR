@@ -6,6 +6,7 @@
 
 | Date　　　| Update |
 | -- | -- |
+| 2021-12-11 | New: Added a Image Tracker using OpenCV WebAssembly. Please see the "Image AR using OpenCV". |
 | 2021-09-07 | New: Added a Color Tracker mode. Please see the "Color AR". |
 | 2021-08-15 | New: Added a video mask mode for image AR. This is a CSS 3D transformation, which does not require three.js. Please see the "Image AR and Video Mask". Update: Replace the spirit geometry with a plane geometry. |
 | 2021-04-03 | Update: The "access a camera" mode of Image AR is recoverd. |
@@ -31,6 +32,7 @@ The "tracking.js" brings computer vision algorithms and techniques into browser 
 Index Page of the WeChat Mini-program
 
 ![avatar](screenshot/index.jpg)
+
 ![avatar](screenshot/index_2.jpg)
 
 ## Image AR and 3D Mask
@@ -51,6 +53,10 @@ A effect of rotating.
 
 ![avatar](screenshot/1-3.jpg)
 
+## Image AR using OpenCV
+
+This is the same as above. 
+
 ## Image AR and Video Mask
 
 Use the demo to scan a rotating image below. 
@@ -60,20 +66,6 @@ Use the demo to scan a rotating image below.
 A video player is on and aligned with the image.
 
 ![avatar](screenshot/4-2.jpg)
-
-## Face AR
-
-Use the demo to scan a face. Expect a effect below.
-
-![avatar](screenshot/2-1.jpg)
-
-A effect of translating and scaling.
-
-![avatar](screenshot/2-2.jpg)
-
-Because the landmarks of the demo are simple and basic, only a effect of translating and scaling is on a rotating image.
-
-![avatar](screenshot/2-3.jpg)
 
 ## Color AR
 
@@ -88,6 +80,20 @@ A effect of hiddening.
 Custom the color of the highlighted area.
 
 ![avatar](screenshot/5_setting.jpg)
+
+## Face AR
+
+Use the demo to scan a face. Expect a effect below.
+
+![avatar](screenshot/2-1.jpg)
+
+A effect of translating and scaling.
+
+![avatar](screenshot/2-2.jpg)
+
+Because the landmarks of the demo are simple and basic, only a effect of translating and scaling is on a rotating image.
+
+![avatar](screenshot/2-3.jpg)
 
 ## How to replace the "cat beard" image
 

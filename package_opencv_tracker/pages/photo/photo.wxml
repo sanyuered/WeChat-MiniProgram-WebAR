@@ -1,0 +1,17 @@
+<view class="page">
+    <view>
+      <camera 
+        device-position="{{devicePosition}}" 
+        binderror="error">   
+        <canvas
+          id="canvasWebGL"
+          class="canvasWebGL"
+          type="webgl">
+        </canvas>   
+      </camera> 
+  </view>
+  <view class="page__bd page__bd_spacing">
+    <button type="primary" bindtap="takePhoto" class="marginTop10">{{btnText}}</button>
+    <button type="default" bindtap="changeDirection" class="marginTop10">change camera direction</button>
+  </view>
+</view>

@@ -29,6 +29,13 @@
         "pages/photo/photo",
         "pages/camera/camera"
       ]
+    },
+    {
+      "root": "package_opencv_tracker",
+      "pages": [
+        "pages/photo/photo",
+        "pages/camera/camera"
+      ]
     }
   ],
   "window": {
