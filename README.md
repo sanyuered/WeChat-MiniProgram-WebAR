@@ -55,7 +55,15 @@ A effect of rotating.
 
 ## Image AR using OpenCV
 
-This is the same as above. 
+This is the same as above. Supports image rotation.
+
+The image is rotated by 30 degrees.
+
+![avatar](screenshot/5-1.jpg)
+
+The image is rotated by 90 degrees.
+
+![avatar](screenshot/5-2.jpg)
 
 ## Image AR and Video Mask
 
