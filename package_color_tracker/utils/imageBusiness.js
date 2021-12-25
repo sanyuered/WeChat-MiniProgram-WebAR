@@ -107,7 +107,7 @@ function updateMaskPosition(rects,
     });
 }
 
-export {
+module.exports = {
     initTracker,
     detect,
     updateMaskPosition,

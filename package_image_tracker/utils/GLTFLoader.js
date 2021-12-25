@@ -3,7 +3,7 @@
 // after: var URL = {};
 // date: 2019-10-31
 
-export function registerGLTFLoader(THREE) {
+module.exports = function registerGLTFLoader(THREE) {
 
   /**
    * @author Rich Tibbett / https://github.com/richtr
