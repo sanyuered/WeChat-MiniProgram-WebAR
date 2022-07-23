@@ -16,6 +16,7 @@
     </view>
     <view class="page__bd page__bd_spacing">
     </view>
-      <!-- canvas v2-->
-    <canvas id="hiddenCanvas" type="2d" class="hiddenCanvas"></canvas>
+    <view class="marginTop10">Pattern Image:</view>
+    <image id="patternImage" 
+    src="{{patternImageUrl}}"></image>
 </view>

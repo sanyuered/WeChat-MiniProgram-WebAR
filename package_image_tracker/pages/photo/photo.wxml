@@ -1,21 +1,17 @@
 <view class="page">
-    <view>
-      <camera 
-        device-position="{{devicePosition}}" 
-        binderror="error">   
-        <canvas
-          id="canvasWebGL"
-          class="canvasWebGL"
-          type="webgl">
-        </canvas>   
-      </camera> 
+  <view>
+    <image src="{{sampleImage}}" class="image1">
+    </image>
+    <canvas 
+    id="canvasWebGL" 
+    class="canvasWebGL" 
+    type="webgl">
+    </canvas>
   </view>
   <view class="page__bd page__bd_spacing">
-    <button type="primary" bindtap="takePhoto" class="marginTop10">{{btnText}}</button>
-    <button type="default" bindtap="changeDirection" class="marginTop10">change camera direction</button>
+    <button type="primary" bindtap="takePhoto" class="marginTop10">Detect</button>
   </view>
-   <!-- canvas v2-->
-  <canvas id="canvas2d" type="2d" class="canvas1"></canvas>
-   <!-- canvas v2-->
-  <canvas id="hiddenCanvas" type="2d" class="hiddenCanvas"></canvas>
+  <view class="marginTop10">Pattern Image:</view>
+  <image id="patternImage" 
+  src="{{patternImageUrl}}"></image>
 </view>

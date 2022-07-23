@@ -44,5 +44,6 @@
     "navigationBarTitleText": "Miniprogram AR",
     "navigationBarTextStyle": "black"
   },
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "workers": "workers"
 }

@@ -25,17 +25,12 @@ Page({
         },
         colorRange: 5000,
         colorArray: ['yellow'],
-        canvasMaskStyle:"",
+        canvasMaskStyle: "",
     },
     onReady() {
-
-    },
-    onLoad() {
         var _that = this;
-        // waiting for dom completed
-        setTimeout(function () {
-            _that.getCanvasOfType2d();
-        }, 150);
+        _that.getCanvasOfType2d();
+
         const system = wx.getSystemInfoSync().system;
         // if iOS
         if (system.indexOf('iOS') !== -1) {
@@ -43,7 +38,7 @@ Page({
             this.intervalTimeout = 100;
             canvasHeight = 450;
             this.setData({
-                canvasMaskStyle:"height: 450px;",
+                canvasMaskStyle: "height: 450px;",
             });
         }
     },
@@ -61,7 +56,7 @@ Page({
             frameHeight,
             canvasWidth,
             canvasHeight
-            );
+        );
         // process end
     },
     getCanvasOfType2d() {

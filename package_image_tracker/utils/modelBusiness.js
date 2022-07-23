@@ -2,7 +2,7 @@ const { createScopedThreejs } = require('threejs-miniprogram');
 // the scale of the model image
 const initScale = 300;
 // a index of a track point on a pattern image
-const trackPoint = { 
+const trackPoint = {
     x: 185, // the width of the pattern image is 375
     y: 224, // the height of the pattern image is 375
 };
@@ -113,15 +113,23 @@ function setModel(prediction,
         return;
     }
     var transform = prediction.transform.data;
+
+    // Because the worker message converts the transform array to an object,
+    // need to convert back.
+    var td = []
+    for (var i = 0; i < 9; i++) {
+        td[i] = transform[i];
+    }
+
     // position
-    var target = getTranslation(transform, 
-        trackPoint.x, 
+    var target = getTranslation(td,
+        trackPoint.x,
         trackPoint.y);
-    mainModel.position.set(target._x - canvasWidth / 2, 
+    mainModel.position.set(target._x - canvasWidth / 2,
         canvasHeight / 2 - target._y, 0);
 
     // rotation
-    var r = getRotationAndScale(transform);
+    var r = getRotationAndScale(td);
     var rotationMatrix = new THREE.Matrix4();
     rotationMatrix.fromArray(r.rotation);
     mainModel.rotation.setFromRotationMatrix(rotationMatrix);
@@ -142,7 +150,7 @@ function getTranslation(td, x, y) {
     var _x = x2 * sc;
     var _y = y2 * sc;
 
-    console.log('translation', _x, _y);
+    // console.log('translation', _x, _y);
 
     return { _x, _y };
 
@@ -156,9 +164,11 @@ function getRotationAndScale(td) {
         m10 * m10 +
         m20 * m20);
     // normal
+
     var H = td.map(function (item) {
         return item / norm;
     });
+
 
     m00 = H[0];
     m10 = H[3];
@@ -185,8 +195,8 @@ function getRotationAndScale(td) {
             0, 0, 0, 1
         ];
 
-    console.log('scale', scale);
-    console.log('rotation', rotation);
+    // console.log('scale', scale);
+    // console.log('rotation', rotation);
 
     return {
         scale,

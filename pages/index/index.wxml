@@ -51,7 +51,6 @@
                 </view>
             </view>
         </view>
-
         <!-- Color Tracker -->
         <view class="weui-panel">
             <view class="weui-panel__hd">Color AR</view>
@@ -69,7 +68,6 @@
                 </view>
             </view>
         </view>
-
         <!-- Face AR -->
         <view class="weui-panel marginTop10">
             <view class="weui-panel__hd">Face AR</view>
@@ -85,5 +83,6 @@
                 </view>
             </view>
         </view>
+
     </view>
 </view>

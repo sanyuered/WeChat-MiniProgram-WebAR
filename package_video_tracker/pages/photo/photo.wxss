@@ -14,7 +14,7 @@
     align-items: center;
 }
 
-.camera{
+.image1{
     position: absolute;
     width: 375px; 
     height:450px;
@@ -32,16 +32,4 @@
     height:375px;
 }
 
-.canvas2d {
-    position:fixed;
-    left:1000px;
-    width: 375px; 
-    height: 500px;
-}
 
-.hiddenCanvas{
-    position:fixed;
-    left:1000px;
-    width:3000px;
-    height:2000px;
-}

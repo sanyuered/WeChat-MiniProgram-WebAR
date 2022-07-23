@@ -10,68 +10,76 @@ const trackPoint = {
 };
 
 Page({
-  canvasContext: null,
-  canvasDom: null,
+  // canvasContext: null,
+  // canvasDom: null,
   videoContext: null,
   data: {
     notice: '',
-    sampleUrl: 'sample.jpg',
-    patternImageUrl: 'face_pattern.jpg',
+    sampleUrl: '/assets/sample.jpg',
+    patternImageUrl: '/assets/face_pattern.jpg',
     videoUrl: 'https://sanyuered.github.io/imgs/sample.mp4',
     videoTransform: '',
     isButtonDisabled: false,
-    isVideoVisible:false,
-    animationData:null,
+    isVideoVisible: false,
+    animationData: null,
   },
-  onLoad: function () {
+  async onReady () {
     var _that = this;
-    // waiting for dom completed
-    setTimeout(function () {
-      image.initTracker();
-      _that.getCanvasOfType2d();
-    }, 150);
+    await image.initTracker();
     _that.videoContext = wx.createVideoContext(videoMaskId)
   },
-  onUnload: function () {
+  onUnload() {
   },
-  processPhoto(photoPath, imageWidth, imageHeight, ctx) {
-    var _that = this;
-
-    // const ctx = wx.createCanvasContext(canvasId);
-    var canvasWidth = imageWidth;
+  // 获取图像数据和调整图像大小
+  getImageData(image, offscreenCanvas) {
+    var _that = this
+    canvasWidth = image.width;
     if (canvasWidth > maxCanvasWidth) {
       canvasWidth = maxCanvasWidth;
     }
     // canvas Height
-    var canvasHeight = Math.floor(canvasWidth * (imageHeight / imageWidth));
+    canvasHeight = Math.floor(canvasWidth * (image.height / image.width));
+    // 离屏画布的宽度和高度不能小于图像的
+    offscreenCanvas.width = canvasWidth;
+    offscreenCanvas.height = canvasHeight;
     // draw image on canvas
-    ctx.drawImage(photoPath, 0, 0, canvasWidth, canvasHeight);
-
+    var ctx = offscreenCanvas.getContext('2d')
+    ctx.drawImage(image, 0, 0, canvasWidth, canvasHeight);
     // get image data from canvas
-    let res = ctx.getImageData(
-      0,
-      0,
-      canvasWidth,
-      canvasHeight);
+    var imgData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
 
+    return imgData
+  },
+  // 创建图像对象
+  async createImageElement(imgUrl) {
+    var _that = this
+    // 创建2d类型的离屏画布（需要微信基础库2.16.1以上）
+    var offscreenCanvas = wx.createOffscreenCanvas({ type: '2d' });
+    const image = offscreenCanvas.createImage();
+    await new Promise(function (resolve, reject) {
+      image.onload = resolve
+      image.onerror = reject
+      image.src = imgUrl
+    })
+    const imageData = _that.getImageData(image, offscreenCanvas)
+    return imageData
+  },
+  processPhoto(imageData) {
+    var _that = this;
     wx.showLoading({
       title: 'Detecting...',
     });
-    _that.setData({
-      isButtonDisabled: true,
-    });
-
     // process start
-    image.detect(res.data,
-      canvasWidth,
-      canvasHeight,
+    image.detect(imageData.data,
+      imageData.width,
+      imageData.height,
       function (event) {
         wx.hideLoading();
         _that.setData({
           isButtonDisabled: false,
         });
-
         var result = event.data;
+
         if (result && result.prediction) {
           // set the position
           image.updateMaskVideoPosition(result.prediction,
@@ -92,38 +100,10 @@ Page({
     // process end
 
   },
-  getCanvasOfType2d() {
-    var _that = this;
-    wx.createSelectorQuery()
-      .select('#' + canvasId)
-      .fields({ node: true, size: true })
-      .exec((res) => {
-        const canvas2d = res[0].node;
-        let ctx = canvas2d.getContext("2d");
-
-        // needs to set the canvas size
-        canvas2d.width = res[0].width;
-        canvas2d.height = res[0].height;
-
-        _that.canvasDom = canvas2d;
-        _that.canvasContext = ctx;
-
-      });
-  },
-  createImage(canvasDom, imgUrl, callback) {
-    const image = canvasDom.createImage();
-    image.onload = () => {
-      callback(image);
-    };
-    image.onerror = (err) => {
-      console.log("photo.js createImage", err);
-    };
-    image.src = imgUrl;
-  },
   playMaskVideo() {
     this.videoContext.play();
   },
-  takePhoto() {
+  async takePhoto() {
     var _that = this;
     if (_that.data.isButtonDisabled) {
       return
@@ -135,16 +115,10 @@ Page({
 
     _that.playMaskVideo();
 
-    _that.createImage(
-      _that.canvasDom,
-      _that.data.sampleUrl,
-      function (image) {
-        console.log('size of image:', image.width, image.height);
-        _that.processPhoto(image,
-          image.width,
-          image.height,
-          _that.canvasContext);
-      })
+      const imageData = await _that.createImageElement(_that.data.sampleUrl)
+      console.log('size of image:', imageData.width, imageData.height);
+      _that.processPhoto(imageData);
+
   },
   error(e) {
     console.log(e.detail);

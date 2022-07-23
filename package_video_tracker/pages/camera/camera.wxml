@@ -25,6 +25,5 @@
     <view class="marginTop10">Pattern Image:</view>
       <image id="patternImage" 
       src="{{patternImageUrl}}"></image>
-      <!-- canvas v2-->
-    <canvas id="hiddenCanvas" type="2d" class="hiddenCanvas"></canvas>
+   
 </view>

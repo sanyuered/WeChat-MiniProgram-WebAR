@@ -1,6 +1,6 @@
 <view class="page">
   <view class="imagePlayer">
-      <image id="inputData" src="{{sampleUrl}}" class="camera">
+      <image id="inputData" src="{{sampleUrl}}" class="image1">
       </image>
       <video id="videoMask" 
       hidden="{{!isVideoVisible}}"
@@ -20,8 +20,5 @@
   <view class="marginTop10">Pattern Image:</view>
       <image id="patternImage" 
       src="{{patternImageUrl}}"></image>
-   <!-- canvas v2-->
-  <canvas id="canvas2d" type="2d" class="canvas2d"></canvas>
-   <!-- canvas v2-->
-  <canvas id="hiddenCanvas" type="2d" class="hiddenCanvas"></canvas>
+   
 </view>

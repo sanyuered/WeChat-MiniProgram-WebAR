@@ -25,12 +25,11 @@ Page({
     colorRange: 5000,
     colorArray: ['yellow'],
   },
-  onLoad: function () {
+  onReady: function () {
     var _that = this;
-    // waiting for dom completed
-    setTimeout(function () {
-      _that.getCanvasOfType2d();
-    }, 150);
+
+    _that.getCanvasOfType2d();
+
     this.setData({
       sampleUrl: './5_color.jpg',
     });

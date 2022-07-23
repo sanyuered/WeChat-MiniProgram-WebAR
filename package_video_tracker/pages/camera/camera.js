@@ -10,39 +10,36 @@ const trackPoint = {
 Page({
     videoContext: null,
     // throttling for Android
-    intervalTimeout: 200,
+    intervalTimeout: 300,
     intervalId: null,
     // a camera listener
     listener: null,
     data: {
         devicePosition: 'back',
         notice: '',
-        patternImageUrl: 'face_pattern.jpg',
+        // patternImageUrl: 'face_pattern.jpg',
         videoUrl: 'https://sanyuered.github.io/imgs/sample.mp4',
         videoTransform: '',
+        patternImageUrl: '/assets/face_pattern.jpg',
         isButtonDisabled: false,
         isVideoVisible: false,
-        animationData:null,
+        animationData: null,
     },
-    onReady() {
+    async onReady() {
         const system = wx.getSystemInfoSync().system;
         // if iOS
         if (system.indexOf('iOS') !== -1) {
             // throttling for iOS
             this.intervalTimeout = 3000;
         }
-    },
-    onLoad() {
         var _that = this;
-        // waiting for dom completed
-        setTimeout(function () {
-            image.initTracker();
-        }, 150);
+        await image.initTracker();
+
         _that.videoContext = wx.createVideoContext(videoMaskId)
         // the camera listener is going to start to track
         _that.startTacking();
     },
-    onUnload: function () {
+    onUnload() {
         this.stopTacking();
         console.log('onUnload', 'the listener is stopped.');
     },

@@ -1,49 +1,53 @@
-const image = require('../../utils/imageBusiness.js');
+const workerRequest = require('../../utils/workerRequest.js');
+const imageBusiness = require('../../utils/imageBusiness.js');
 const model = require('../../utils/modelBusiness.js');
 const canvasWebGLId = 'canvasWebGL';
 // a url of sprite image
-const modelUrl = '../../utils/cat_beard.png';
+const modelUrl = '/assets/cat_beard.png';
 
 Page({
-    // throttling for Android
-    intervalTimeout: 200,
+    // throttling for Android and iOS
+    intervalTimeout: 500,
     intervalId: null,
     // a camera listener
     listener: null,
+    // worker线程的方法是否可用
+    canUseGetCameraFrameData: false,
     data: {
         devicePosition: 'back',
+        patternImageUrl: '/assets/face_pattern.jpg',
     },
-    onReady() {
-        const system = wx.getSystemInfoSync().system;
-        // if iOS
-        if (system.indexOf('iOS') !== -1) {
-              // throttling for iOS
-              this.intervalTimeout = 3000;
-        }
-    },
-    onLoad() {
+    async onReady() {
         var _that = this;
-        // waiting for dom completed
-        setTimeout(function () {
-            // load 3d model
-            model.initThree(canvasWebGLId, modelUrl);
-            image.initTracker();
-            // the camera listener is going to start to track
-            _that.startTacking();
-        }, 150);
+        // load 3d model
+        model.initThree(canvasWebGLId, modelUrl);
+        const patternImageArray = await imageBusiness.getPatternData()
+        // 初始化识别图片
+        workerRequest.initTracker(patternImageArray, function () {
+            // 检查worker线程是否有getCameraFrameData()方法
+            workerRequest.canUse('getCameraFrameData', function (res) {
+                if (res.msg === 'ok') {
+                    _that.canUseGetCameraFrameData = true
+                }
+                // the camera listener is going to start to track
+                _that.startTacking();
+            })
+        });
     },
-    onUnload: function () {
+    onUnload() {
         this.stopTacking();
         console.log('onUnload', 'the listener is stopped.');
 
         model.stopAnimate();
         model.dispose();
     },
-    onCameraFrame_callback(resData,
+    onCameraFrame_callback(
+        frameData,
         canvasWidth,
         canvasHeight) {
         // process start
-        image.detect(resData,
+        workerRequest.detect('camera',
+            frameData,
             canvasWidth,
             canvasHeight,
             function (event) {
@@ -60,7 +64,6 @@ Page({
                         icon: 'none'
                     });
                 }
-
             });
         // process end
     },
@@ -73,22 +76,32 @@ Page({
         var canvasWidth;
         var canvasHeight;
         this.listener = context.onCameraFrame(function (res) {
-            frameData = new Uint8ClampedArray(res.data);
+            // 在iOS新版worker线程中，获取相机图像。
+            if (_that.canUseGetCameraFrameData) {
+                frameData = []
+            } else {
+                // android、旧版基础库的iOS、微信开发者工具等环境
+                frameData = new Uint8ClampedArray(res.data);
+            }
             canvasWidth = res.width;
             canvasHeight = res.height;
-            console.log('onCameraFrame:', res.width, res.height);
         });
 
         this.intervalId = setInterval(function () {
-            if (frameData) {
-                _that.onCameraFrame_callback(frameData,
+            if (canvasWidth) {
+                console.log('Camera Frame', canvasWidth, canvasHeight);
+                _that.onCameraFrame_callback(
+                    frameData,
                     canvasWidth,
                     canvasHeight);
             }
         }, this.intervalTimeout);
 
         // start
-        this.listener.start();
+        this.listener.start({
+            // 仅在iOS上可用
+            worker: workerRequest.getWorker(),
+        });
         console.log('startTacking', 'listener is running');
     },
     stopTacking() {

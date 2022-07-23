@@ -6,6 +6,7 @@
 
 | Date　　　| Update |
 | -- | -- |
+| 2022-07-23 | New: Use an Experimental Worker on iOS. Please see the "Image AR and 3D Mask". Fixed Issue: "Image AR" cannot run on iOS for a while. |
 | 2021-12-11 | New: Added a Image Tracker using OpenCV WebAssembly. Please see the "Image AR using OpenCV". |
 | 2021-09-07 | New: Added a Color Tracker mode. Please see the "Color AR". |
 | 2021-08-15 | New: Added a video mask mode for image AR. This is a CSS 3D transformation, which does not require three.js. Please see the "Image AR and Video Mask". Update: Replace the spirit geometry with a plane geometry. |
@@ -36,6 +37,11 @@ Index Page of the WeChat Mini-program
 ![avatar](screenshot/index_2.jpg)
 
 ## Image AR and 3D Mask
+
+iOS Wechat version number 8.0.24 or above：It will use an Experimental Worker.
+
+
+Android and other: It will not use an Experimental Worker.
 
 Use the demo to scan a pattern image below. 
 

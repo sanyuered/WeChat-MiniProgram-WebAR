@@ -119,7 +119,7 @@ function detect(params) {
   var result
 
   // 新版基础库的iOS的worker线程
-  // worker在worker线程中是全局变量
+  // 变量worker在worker线程中是全局变量
   if (params.type === 'camera' && worker && worker.getCameraFrameData) {
     const cameraFrameData = worker.getCameraFrameData()
     const frame = new Uint8ClampedArray(cameraFrameData);
@@ -132,7 +132,7 @@ function detect(params) {
   if(params.callback){
     params.callback(result)
   }
-
+  
   return result
 }
 

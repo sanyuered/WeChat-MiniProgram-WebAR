@@ -1,34 +1,19 @@
 
 const ImageTracker = require('ImageTracker.js');
 
-const hiddenCanvasId = 'hiddenCanvas';
 // pattern image resample levels
-
 const resampleLevels = 4;
 
 // pattern image url: relative url,temp url and network url.
-
-const patternImageUrl = './face_pattern.jpg';
-// pattern image width
-var patternFrameWidth;
-
-// pattern image height
-var patternFrameHeight;
+const patternImageUrl = '/assets/face_pattern.jpg';
 
 // pattern image max width
+const maxCanvasWidth = 375;
 
-const patternFrameMaxWidth = 375;
 // image tracker.
-
 var tracker = null;
-// temp pattern Image Path
 
-var tempPatternImagePath = null;
-// pattern Image Array
-
-var patternImageArray = [];
 // magic number
-
 const sc_inc = Math.sqrt(2.0);
 
 function detect(frame, width, height, callback) {
@@ -44,96 +29,71 @@ function detect(frame, width, height, callback) {
   }
 }
 
-async function drawPatternImageCallback(ctx) {
+// 获取图像数据和调整图像大小
+function getSampleData(image, offscreenCanvas) {
   var imageX = 0;
-  var newWidth = patternFrameWidth;
-  var newHeight = patternFrameHeight;
+  var newWidth = image.width;
+  var newHeight = image.height;
+  var patternImageArray = [];
 
+  canvasWidth = image.width;
+  if (canvasWidth > maxCanvasWidth) {
+    canvasWidth = maxCanvasWidth;
+  }
+  // canvas Height
+  canvasHeight = Math.floor(canvasWidth * (image.height / image.width));
+  // 离屏画布的宽度和高度不能小于采样图像的
+  offscreenCanvas.width = canvasWidth * resampleLevels;
+  offscreenCanvas.height = canvasHeight;
+
+  // draw image on canvas
+  var ctx = offscreenCanvas.getContext('2d')
+  // resample
   for (var i = 0; i < resampleLevels; i++) {
+    // draw image on canvas
+    ctx.drawImage(image, imageX, 0, newWidth, newHeight); // resample
+
+    // get image data 
     let canvasRes = ctx.getImageData(
       imageX,
       0,
       newWidth,
       newHeight);
 
-    console.log('resample pattern image', canvasRes.width, canvasRes.height);
     patternImageArray.push({
       pixels: canvasRes.data,
       width: canvasRes.width,
       height: canvasRes.height
-    }); // resample
-
-    imageX += newWidth;
-    newWidth = Math.round(newWidth / sc_inc);
-    newHeight = Math.round(newHeight / sc_inc);
-  } // init ImageTracker
-
-
-  tracker = new ImageTracker(patternImageArray);
-} // get patter image
-
-
-function initTracker() {
-  wx.createSelectorQuery()
-    .select('#' + hiddenCanvasId)
-    .fields({ node: true, size: true })
-    .exec((res) => {
-      const canvas2d = res[0].node;
-      let ctx = canvas2d.getContext("2d");
-
-      // needs to set the canvas size
-      canvas2d.width = res[0].width;
-      canvas2d.height = res[0].height;
-
-      createImage(canvas2d,
-        patternImageUrl,
-        function (image) {
-          getCanvasContext(image, ctx)
-        })
     });
-}
-
-function createImage(canvasDom, imgUrl, callback) {
-  const image = canvasDom.createImage();
-  image.onload = () => {
-    callback(image);
-  };
-  image.onerror = (err) => {
-    console.log("imageBusiness.js createImage", err);
-  };
-  image.src = imgUrl;
-}
-
-async function getCanvasContext(image, ctx) {
-  patternImageArray = [];
-
+    console.log('resample pattern image', canvasRes.width, canvasRes.height);
   
-  // pattern image temp path
-  // tempPatternImagePath = res.path; // pattern image size
-
-  patternFrameWidth = image.width;
-  patternFrameHeight = image.height; // reduce image size to increase image process speed
-
-  if (patternFrameWidth > patternFrameMaxWidth) {
-    patternFrameWidth = patternFrameMaxWidth;
-    patternFrameHeight = image.height / image.width * patternFrameMaxWidth;
-  } // resample width and height
-
-  var newWidth = patternFrameWidth;
-  var newHeight = patternFrameHeight;
-  var imageX = 0;
-
-  for (var i = 0; i < resampleLevels; i++) {
-    // draw image on canvas
-    // ctx.drawImage(tempPatternImagePath, imageX, 0, newWidth, newHeight); // resample
-    ctx.drawImage(image, imageX, 0, newWidth, newHeight); // resample
-
     imageX += newWidth;
     newWidth = Math.round(newWidth / sc_inc);
     newHeight = Math.round(newHeight / sc_inc);
   }
 
-  drawPatternImageCallback(ctx);
+  return patternImageArray
+
+}
+
+// 创建图像对象
+async function createImageElement(imgUrl) {
+  // 创建2d类型的离屏画布（需要微信基础库2.16.1以上）
+  var offscreenCanvas = wx.createOffscreenCanvas({ type: '2d' });
+  const image = offscreenCanvas.createImage();
+  await new Promise(function (resolve, reject) {
+    image.onload = resolve
+    image.onerror = reject
+    image.src = imgUrl
+  })
+  const sampleData = getSampleData(image, offscreenCanvas)
+  return sampleData
+}
+
+async function initTracker() {
+  const patternImageArray = await createImageElement(patternImageUrl)
+  // init ImageTracker
+  tracker = new ImageTracker(patternImageArray);
 }
 
 function getTranslation(td, x, y) {

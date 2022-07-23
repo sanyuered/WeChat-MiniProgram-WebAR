@@ -13,7 +13,7 @@ Page({
     // if it is taking a photo
     isRunning: true,
   },
-  onLoad: function () {
+  onReady: function () {
     // load 3d model
     model.initThree(canvasWebGLId, modelUrl);
     face.initTracker();

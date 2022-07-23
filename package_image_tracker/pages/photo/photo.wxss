@@ -4,7 +4,7 @@
 .page__bd_spacing{
     padding-top:10px;
 }
-camera{
+.image1{
     width: 375px; 
     height: 500px;
     z-index: 1;
@@ -12,10 +12,11 @@ camera{
 }
 
 .canvasWebGL{
+    position: absolute;
+    top:0;
     width: 375px; 
     height: 500px;
     z-index: 3;
-    margin:auto;
 }
 
 .canvas1{
@@ -25,9 +26,7 @@ camera{
     margin:auto;
 }
 
-.hiddenCanvas{
-    position:fixed;
-    left:1000px;
-    width:800%;
-    height:400%;
+#patternImage{
+    width:375px;
+    height:375px;
 }
