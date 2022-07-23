@@ -1,0 +1,17 @@
+<view class="page">
+    <view>
+      <image src="{{sampleImage}}" class="image1">
+      </image> 
+        <canvas
+          id="canvasWebGL"
+          class="canvasWebGL"
+          type="webgl">
+        </canvas>   
+  </view>
+  <view class="page__bd page__bd_spacing">
+    <button type="primary" bindtap="takePhoto" class="marginTop10">Detect</button>
+  </view>
+  <view class="marginTop10">Pattern Image:</view>
+  <image id="patternImage" 
+  src="{{patternImageUrl}}"></image>
+</view>

@@ -1,0 +1,33 @@
+.page__bd{
+    padding-bottom:0;
+}
+.page__bd_spacing{
+    padding-top:10px;
+}
+.image1{
+    width: 375px; 
+    height: 500px;
+    z-index: 1;
+    margin:auto;
+}
+
+.canvasWebGL{
+    position: absolute;
+    top:0;
+    width: 375px; 
+    height: 500px;
+    z-index: 3;
+    margin:auto;
+}
+
+.canvas1{
+    width: 375px;   
+    height: 500px;
+    z-index: 2;
+    margin:auto;
+}
+
+#patternImage{
+    width:375px;
+    height:375px;
+}
