@@ -18,6 +18,7 @@ Page({
     listener: null,
     data: {
         devicePosition: 'back',
+        patternImageUrl: '/assets/face_pattern.jpg',
     },
     onReady() {
         var _that = this;

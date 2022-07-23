@@ -18,9 +18,7 @@ camera{
     margin:auto;
 }
 
-.hiddenCanvas{
-    position:fixed;
-    left:1000px;
-    width:800%;
-    height:400%;
+#patternImage{
+    width:375px;
+    height:375px;
 }

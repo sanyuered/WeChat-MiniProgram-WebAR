@@ -1,21 +1,19 @@
 // 识别图地址
-const patternImage = './face_pattern.jpg'
+const patternImage = '/assets/face_pattern.jpg'
 // 画布最大宽度
 const maxCanvasWidth = 375
 const canvasWebGLId = 'canvasWebGL';
 const model = require('../../utils/modelBusiness.js');
 const imageTracker = require('../../utils/imageTracker.js');
 // a url of a image
-const modelUrl = '../../utils/cat_beard.png';
+const modelUrl = '/assets/cat_beard.png';
 var canvasWidth
 var canvasHeight
 
 Page({
   data: {
-    btnText: 'Take a photo',
-    devicePosition: 'back',
-    // if it is taking a photo
-    isRunning: true,
+    sampleImage: '/assets/sample.jpg',
+    patternImageUrl: '/assets/face_pattern.jpg',
   },
   onReady() {
     var _that = this;
@@ -26,6 +24,7 @@ Page({
       // 识别图
       const patternImageData = await _that.createImageElement(patternImage)
       imageTracker.initTemplateImage(patternImageData)
+      // 等待opencv完成初始化
     }, 1000)
 
   },
@@ -65,14 +64,17 @@ Page({
       image.onerror = reject
       image.src = imgUrl
     })
+
     const imageData = _that.getImageData(image, offscreenCanvas)
     return imageData
   },
   processPhoto(imageData) {
-
+    wx.showLoading({
+      title: 'Detecting...',
+    });
     // process start
     var result = imageTracker.detect(imageData)
-
+    wx.hideLoading();
     if (result && result.prediction) {
       // set the rotation and position of the 3d model.    
       model.setModel(result.prediction,
@@ -93,52 +95,12 @@ Page({
       });
     }
     // process end
-
   },
-   takePhoto() {
+  async takePhoto() {
     var _that = this;
 
-    if (_that.data.isRunning) {
-      _that.setData({
-        btnText: 'Retry',
-        isRunning: false,
-      });
-
-      // take a photo
-      const context = wx.createCameraContext();
-      context.takePhoto({
-        quality: 'normal',
-        success: async (res) => {
-          var photoPath = res.tempImagePath;
-          const imageData = await _that.createImageElement(photoPath)
-          console.log('size of image:', imageData.width, imageData.height);
-          _that.processPhoto(imageData);
-        }
-      });
-
-    }
-    else {
-      _that.setData({
-        btnText: 'Take a photo',
-        isRunning: true,
-      });
-
-      // clear 3d canvas
-      model.clearSceneBackground();
-    }
+    const imageData = await _that.createImageElement(_that.data.sampleImage)
+    console.log('size of image:', imageData.width, imageData.height);
+    _that.processPhoto(imageData);
   },
-  changeDirection() {
-    var status = this.data.devicePosition;
-    if (status === 'back') {
-      status = 'front';
-    } else {
-      status = 'back';
-    }
-    this.setData({
-      devicePosition: status,
-    });
-  },
-  error(e) {
-    console.log(e.detail);
-  }
 })
